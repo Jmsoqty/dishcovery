@@ -428,14 +428,14 @@
                                 </div>
                             </div>
                         </div>`+`<div class="d-flex justify-content-around">
-
-            <img src="../assets/img/comment.png" class="img-fluid my-auto" width="50px">
-
-            <button type="button" class="btn bg-none w-100 text-start border" data-bs-toggle="modal" data-bs-target="#modal2"> 
-                Comment…
-            </button>
-
-        </div>`;
+    <img src="../assets/img/comment.png" type="button" class="img-fluid my-auto" width="50px" data-bs-toggle="modal" data-bs-target="#modal2">
+    <div class="input-group">
+        <input class="form-control" type="text" placeholder="Write a comment">
+        <button class="btn btn-outline-light" type="button">
+            <img src="../assets/img/send.svg" class="img-fluid" width="25px">
+        </button>
+    </div>
+</div>`;
                     $('#recipeContainer').append(recipeHtml);
                 });
             } else {
@@ -494,31 +494,31 @@
 
         <div class="container my-3">
             <div class="d-flex justify-content-around">
-                <div class="my-5">
-                    <img src="../assets/img/default.png" class="img-fluid me-2 rounded-circle" width="50px">
-                </div>
-                <div class="w-100 rounded p-2">
-                    <p>January 5, 2023 at 5:01pm</p>
-                    
-                    <h5 class="fw-bold">Juan Dela Cruz</h5>
-    
-                    <label>Thats amazing!</label>
-                </div>
-
-                <div class="text-center my-auto">
-                    <img src="../assets/img/message.png" class="img-fluid">
-                    <a href="#" class="fw-bold">Reply</a>
-                </div>
+              <div class="my-5">
+                  <img src="../assets/img/default.png" class="img-fluid me-2 rounded-circle" width="50px">
+              </div>
+              <div class="w-100 rounded p-2">
+                  <p>January 5, 2023 at 5:01pm</p>
+                  
+                  <h5 class="fw-bold">Juan Dela Cruz</h5>
   
+                  <label>Thats amazing!</label>
+              </div>
+
+              <div class="text-center my-auto">
+                  <img src="../assets/img/message.png" class="img-fluid">
+                  <a href="#" class="fw-bold">Reply</a>
+              </div>
+
             </div>
 
-            <hr>
-
             <div class="d-flex justify-content-around">
+                <div class="vr"></div>
+                
                 <div class="my-5">
                     <img src="../assets/img/default.png" class="img-fluid me-2 rounded-circle" width="50px">
                 </div>
-                <div class="w-100 rounded p-2">
+                <div class="rounded p-2">
                     <p>January 5, 2023 at 5:23pm</p>
                     
                     <h5 class="fw-bold">Jennifer Dizon</h5>
@@ -527,13 +527,12 @@
                 </div>
 
                 <div class="text-center my-auto">
-                    <img src="../assets/img/message.png" class="img-fluid">
+                    <img src="../assets/img/message.png" class="img-fluid"><br>
                     <a href="#" class="fw-bold">Reply</a>
                 </div>
+                
   
             </div>
-
-            <hr>
 
         </div>
 
