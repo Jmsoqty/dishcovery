@@ -71,9 +71,17 @@
             <li class="sidebar-item">
               <a class="sidebar-link" href="./history.php" aria-expanded="false">
                 <span>
-                  <i class="ti ti-packages"></i>
+                  <i class="ti ti-star"></i>
                 </span>
                 <span class="hide-menu">Funding</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="./posted_recipes.php" aria-expanded="false">
+                <span>
+                  <i class="ti ti-clipboard"></i>
+                </span>
+                <span class="hide-menu">Posted Recipes</span>
               </a>
             </li>
           </ul>

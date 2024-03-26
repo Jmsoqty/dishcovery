@@ -99,6 +99,12 @@
             </button>
           </li>
           <li>
+            <button class="d-flex align-items-center gap-2 dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#wallet-modal">
+              <i class="ti ti-wallet fs-6"></i>
+              <p class="mb-0 fs-5" title="E-Wallet">E-Wallet</p>
+            </button>
+          </li>
+          <li>
             <a href="../api/logout.php" title="Logout" class="btn btn-outline-primary mx-3 mt-2 d-block"><i class="ti ti-logout me-2"></i> Logout</a>
           </li>
         </ul>

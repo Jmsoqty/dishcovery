@@ -37,7 +37,7 @@
                 <img src="<?php echo $image_source; ?>" class="img-fluid me-2" width="50px">
                 
                 <button type="button" class="btn bg-none w-100 text-start border" data-bs-toggle="modal" data-bs-target="#modal1">
-                    <img src="../assets/img/write.png" class="img-fluid me-2">    
+                    <img src="../assets/img/write.png" class="img-fluid me-2" title="Post Recipe">    
                     Do you have something to share, <?php echo $fullname; ?>?
                 </button>
 
@@ -397,16 +397,16 @@
                                 <div class="col-lg-4 my-auto">
                                     <div class="d-flex justify-content-evenly">
                                         <button type="button" class="btn bg-none click-button" data-index="${index}">
-                                            <img src="../assets/img/click.png" class="img-fluid">
+                                            <img src="../assets/img/click.png" class="img-fluid" title="Ingredients">
                                         </button>
                                         <button type="button" class="btn bg-none">
-                                            <img src="../assets/img/heart.png" class="img-fluid">
+                                            <img src="../assets/img/heart.png" class="img-fluid" title="Donate">
                                         </button>`;
                     // Check if the email is the same as the session email
                     if (userEmail !== recipe.recipe_data.posted_by) {
                         recipeHtml += `
                                         <button type="button" class="btn bg-none">
-                                            <img src="../assets/img/bookmark.png" class="img-fluid" width="40px">
+                                            <img src="../assets/img/bookmark.png" class="img-fluid" width="40px" title="Bookmark">
                                         </button>`;
                     }
                     
