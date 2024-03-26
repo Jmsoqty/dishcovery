@@ -26,9 +26,9 @@
 
         <div class="d-flex justify-content-around">
 
-            <a href=""><img src="../assets/img/search.png" class="img-fluid me-2" width="35px"></a>
+            <img src="../assets/img/search.png" class="img-fluid me-2" id ="searchbar" width="35px">
             
-            <input class="form-control w-100" type="text" placeholder="Search Dishcovery.." aria-label="default input example">
+            <input class="form-control w-100" type="text" id="search" placeholder="Search Dishcovery.." aria-label="default input example">
 
         </div>
 
@@ -376,68 +376,7 @@
                 // Sort recipes by date_updated in descending order to display the most recent one first
                 response.recipes.sort((a, b) => new Date(b.recipe_data.date_updated) - new Date(a.recipe_data.date_updated));
 
-                $.each(response.recipes, function(index, recipe) {
-                    var userEmail = '<?php echo $_SESSION['email']; ?>';
-
-                    var recipeHtml = `
-                        <div class="container border border-1 rounded my-3 p-3">
-                            <div class="row">
-                                <div class="col-12 col-lg-4">
-                                    <div class="d-flex justify-content-around">
-                                        <img src="data:image/jpeg;base64,${recipe.image_data || '../assets/img/default.png'}" class="img-fluid w-25">
-                                        <div class="my-auto">
-                                            <label class="fw-semibold">${recipe.recipe_data.posted_by_name}</label>
-                                            <p>${formatDate(recipe.recipe_data.date_updated)}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4 text-center my-auto">
-                                    <h3>${recipe.recipe_data.recipe_name}</h3>
-                                </div>
-                                <div class="col-lg-4 my-auto">
-                                    <div class="d-flex justify-content-evenly">
-                                        <button type="button" class="btn bg-none click-button" data-index="${index}">
-                                            <img src="../assets/img/click.png" class="img-fluid" title="Ingredients">
-                                        </button>
-                                        <button type="button" class="btn bg-none">
-                                            <img src="../assets/img/heart.png" class="img-fluid" title="Donate">
-                                        </button>`;
-                    // Check if the email is the same as the session email
-                    if (userEmail !== recipe.recipe_data.posted_by) {
-                        recipeHtml += `
-                                        <button type="button" class="btn bg-none">
-                                            <img src="../assets/img/bookmark.png" class="img-fluid" width="40px" title="Bookmark">
-                                        </button>`;
-                    }
-                    
-                    recipeHtml += `</div>
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="row">
-                                <div class="col-12 col-lg-6">
-                                    <div class="p-2 border border-1 rounded p-3" style="max-height: 300px; overflow-y: auto;">
-                                        <h5>Instructions:</h5>`;
-                    var instructions = JSON.parse(recipe.recipe_data.instructions); // Parse the instructions string into an array
-                    $.each(instructions, function(i, instruction) {
-                        recipeHtml += `<label>Step ${i + 1}: ${instruction}</label><br>`;
-                    });
-                    recipeHtml += `</div></div>
-                                <div class="col-12 col-lg-6">
-                                    <img src="data:image/jpeg;base64,${recipe.recipe_data.image}" style="width: 450px; height: 300px;" class="img-fluid border border-1 rounded">
-                                </div>
-                            </div>
-                        </div>`+`<div class="d-flex justify-content-around">
-    <img src="../assets/img/comment.png" type="button" class="img-fluid my-auto" width="50px" data-bs-toggle="modal" data-bs-target="#modal2">
-    <div class="input-group">
-        <input class="form-control" type="text" placeholder="Write a comment">
-        <button class="btn btn-outline-light" type="button">
-            <img src="../assets/img/send.svg" class="img-fluid" width="25px">
-        </button>
-    </div>
-</div>`;
-                    $('#recipeContainer').append(recipeHtml);
-                });
+                renderRecipes(response.recipes); // Render all recipes initially
             } else {
                 console.log(response.message);
             }
@@ -447,37 +386,125 @@
         }
     });
 
+    function renderRecipes(recipes) {
+        $('#recipeContainer').empty(); // Clear existing recipes
+
+        $.each(recipes, function(index, recipe) {
+            var userEmail = '<?php echo $_SESSION['email']; ?>';
+
+            var recipeHtml = `
+                <div class="container border border-1 rounded my-3 p-3">
+                    <div class="row">
+                        <div class="col-12 col-lg-4">
+                            <div class="d-flex justify-content-around">
+                                <img src="data:image/jpeg;base64,${recipe.image_data || '../assets/img/default.png'}" class="img-fluid w-25">
+                                <div class="my-auto">
+                                    <label class="fw-semibold">${recipe.recipe_data.posted_by_name}</label>
+                                    <p>${formatDate(recipe.recipe_data.date_updated)}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 text-center my-auto">
+                            <h3>${recipe.recipe_data.recipe_name}</h3>
+                        </div>
+                        <div class="col-lg-4 my-auto">
+                            <div class="d-flex justify-content-evenly">
+                                <button type="button" class="btn bg-none click-button" data-index="${index}">
+                                    <img src="../assets/img/click.png" class="img-fluid" title="Ingredients">
+                                </button>
+                                <button type="button" class="btn bg-none">
+                                    <img src="../assets/img/heart.png" class="img-fluid" title="Donate">
+                                </button>`;
+            // Check if the email is the same as the session email
+            if (userEmail !== recipe.recipe_data.posted_by) {
+                recipeHtml += `
+                                <button type="button" class="btn bg-none">
+                                    <img src="../assets/img/bookmark.png" class="img-fluid" width="40px" title="Bookmark">
+                                </button>`;
+            }
+
+            recipeHtml += `</div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-12 col-lg-6">
+                            <div class="p-2 border border-1 rounded p-3" style="max-height: 300px; overflow-y: auto;">
+                                <h5>Instructions:</h5>`;
+            var instructions = JSON.parse(recipe.recipe_data.instructions); // Parse the instructions string into an array
+            $.each(instructions, function(i, instruction) {
+                recipeHtml += `<label>Step ${i + 1}: ${instruction}</label><br>`;
+            });
+            recipeHtml += `</div></div>
+                        <div class="col-12 col-lg-6">
+                            <img src="data:image/jpeg;base64,${recipe.recipe_data.image}" style="width: 450px; height: 300px;" class="img-fluid border border-1 rounded">
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-around">
+                    <img src="../assets/img/comment.png" type="button" class="img-fluid my-auto" width="50px" data-bs-toggle="modal" data-bs-target="#modal2">
+                    <div class="input-group">
+                        <input class="form-control" type="text" placeholder="Write a comment">
+                        <button class="btn btn-outline-light" type="button">
+                            <img src="../assets/img/send.svg" class="img-fluid" width="25px">
+                        </button>
+                    </div>
+                </div>`;
+
+            $('#recipeContainer').append(recipeHtml);
+        });
+    }
+
+    $(document).on('click', '.click-button', function() {
+        var index = $(this).data('index');
+        var ingredientsList = response.recipes[index].formatted_ingredients;
+
+        $('#ingredientsTable tbody').empty();
+
+        var ingredients = ingredientsList.map(function(ingredientString) {
+            var parts = ingredientString.split(' ');
+            var quantity = parts.shift();
+            var unit = parts.shift();
+            var title = parts.join(' ');
+            return {
+                qty: quantity,
+                unit: unit,
+                title: title
+            };
+        });
+
+        ingredients.forEach(function(ingredient) {
+            var ingredientQuantity = ingredient.qty.trim();
+            var ingredientUnit = ingredient.unit.trim();
+            var ingredientName = ingredient.title.trim();
+
+            $('#ingredientsTable tbody').append('<tr><td>' + ingredientQuantity + '</td><td>'+ ingredientUnit + ' ' + ingredientName + '</td></tr>');
+        });
+
+        $('#ingredientsModal').modal('show');
+    });
+
+    // Function to filter recipes when the search image is clicked
+    $('#searchbar').click(function() {
+        var searchTerm = $('#search').val().toLowerCase(); // Get the search term from the input field and convert to lowercase
+
+        // Filter recipes based on the search term
+        var filteredRecipes = response.recipes.filter(function(recipe) {
+            return recipe.recipe_data.recipe_name.toLowerCase().includes(searchTerm);
+        });
+
+        renderRecipes(filteredRecipes); // Render filtered recipes
+    });
+
     function formatDate(dateString) {
         var date = new Date(dateString);
         var options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
         return date.toLocaleDateString('en-US', options);
     }
-
-    // Event listener for click.png button
-    $(document).on('click', '.click-button', function() {
-        var index = $(this).data('index'); // Get the index of the clicked recipe
-        var ingredients = response.recipes[index].formatted_ingredients; // Use the formatted ingredients from the response
-        
-        // Clear previous ingredients list
-        $('#ingredientsList').empty();
-        
-        // Check if ingredients is an array
-        if (Array.isArray(ingredients)) {
-            // Populate modal with ingredients
-            ingredients.forEach(function(ingredient) {
-                $('#ingredientsList').append('<p>' + ingredient + '</p>');
-            });
-        } else {
-            // If ingredients is not an array, assume it's a string and append it directly
-            $('#ingredientsList').append('<p>' + ingredients + '</p>');
-        }
-
-        // Show the modal
-        $('#ingredientsModal').modal('show');
-    });
-
   });
 </script>
+
+
 
 
 
@@ -551,15 +578,26 @@
 </div>
 
 <div class="modal fade" id="ingredientsModal" tabindex="-1" aria-labelledby="ingredientsModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: auto;">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="ingredientsModalLabel">Ingredients</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body" id="ingredientsList" style="max-height:200px; overflow: auto; width: 100%;">
-                
+            <div class="modal-body" style="max-height:500px; overflow: auto;">
+                <table id="ingredientsTable" class="table table-striped table-bordered text-center">
+                    <thead>
+                        <tr>
+                            <th>Quantity</th>
+                            <th>Ingredients</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 </div>
+
+
