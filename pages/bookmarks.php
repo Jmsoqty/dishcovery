@@ -270,3 +270,26 @@
 </body>
 
 </html>
+
+<div class="modal fade" id="ingredientsModal" tabindex="-1" aria-labelledby="ingredientsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: auto;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ingredientsModalLabel">Ingredients</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" style="max-height:500px; overflow: auto;">
+                <table id="ingredientsTable" class="table table-striped table-bordered text-center">
+                    <thead>
+                        <tr>
+                            <th>Quantity</th>
+                            <th>Ingredients</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

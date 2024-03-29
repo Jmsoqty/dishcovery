@@ -34,9 +34,9 @@
             <button type="button" class="btn btn-primary mb-2">Regional Dishes</button>
             <button type="button" class="btn btn-primary mb-2">Street Food and Snacks</button>
             <button type="button" class="btn btn-primary mb-2">Exotic Dishes</button>
-            <button type="button" class="btn btn-primary">Foreign Influences</button>
-            <button type="button" class="btn btn-primary">International Dishes</button>
-            <button type="button" class="btn btn-primary">Desserts</button>
+            <button type="button" class="btn btn-primary mb-2">Foreign Influences</button>
+            <button type="button" class="btn btn-primary mb-2">International Dishes</button>
+            <button type="button" class="btn btn-primary mb-2">Desserts</button>
         </div>
     </div>
 
