@@ -132,138 +132,6 @@
       </div>
     </div>
   </div>
-</div><div class="modal fade" id="modal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg">  
-    <div class="modal-content rounded-5 shadow-lg">
-      <div class="text-end p-3">
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body p-3">
-        <h3 class="text-center">Share your dish now!</h3>
-        <input class="form-control text-center my-2" type="text" id="recipe_name" placeholder="Title">
-        <select id="categorySelect" class="form-select my-2" aria-label="Default select example">
-          <option selected disabled>Choose Category</option>
-          <?php
-          // Fetch categories from database and populate the select options
-          $sql = "SELECT category_name FROM tbl_categories";
-          $result = $conn->query($sql);
-
-          if ($result->num_rows > 0) {
-              while($row = $result->fetch_assoc()) {
-                  echo "<option value='" . $row["category_name"] . "'>" . $row["category_name"] . "</option>";
-              }
-          } else {
-              echo "<option>No categories found</option>";
-          }
-          ?>
-        </select>
-        <div class="row">
-          <div class="col-12 col-md-6">
-            <h3>Ingredients</h3>
-            <div id="ingredientContainer">
-              <!-- Ingredients will be dynamically added here -->
-            </div>
-
-            <div class="text-end my-2">
-              <button type="button" class="btn btn-sm btn-outline-primary add-ingredient w-100">+ Add more</button>
-            </div>
-          </div>
-          <div class="col-12 col-md-6">
-            <h3>Instructions</h3>
-            <div id="instructionContainer">
-              <!-- Instructions will be dynamically added here -->
-            </div>
-            <div class="text-end my-2">
-              <button type="button" class="btn btn-sm btn-outline-primary add-instruction w-100">+ Add more</button>
-            </div>
-          </div>
-        </div>
-
-        <hr>
-
-        <div class="row">
-          <div class="col text-center">
-            <h3>Final Output</h3>
-            <div class="shadow border border-opacity-50 mt-2" style="width: 200px; height: 200px; margin: 0 auto; text-align: center; display: flex; align-items: center; justify-content: center;">
-              <img src="../assets/img/questionmark.jpg" style="width: 180px; height: 180px;" class="image-preview">
-            </div>
-            <input type="file" id="image" accept="image/*" class="form-control form-control-sm mt-4 mb-3 profile-image-input">
-          </div>
-        </div>
-
-        <div class="text-center mt-2">
-          <button type="button" id="postRecipeBtn" class="btn btn-primary">Post Recipe</button>
-        </div>
-        
-      </div>
-    </div>
-  </div>
-</div><div class="modal fade" id="modal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg">  
-    <div class="modal-content rounded-5 shadow-lg">
-      <div class="text-end p-3">
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body p-3">
-        <h3 class="text-center">Share your dish now!</h3>
-        <input class="form-control text-center my-2" type="text" id="recipe_name" placeholder="Title">
-        <select id="categorySelect" class="form-select my-2" aria-label="Default select example">
-          <option selected disabled>Choose Category</option>
-          <?php
-          // Fetch categories from database and populate the select options
-          $sql = "SELECT category_name FROM tbl_categories";
-          $result = $conn->query($sql);
-
-          if ($result->num_rows > 0) {
-              while($row = $result->fetch_assoc()) {
-                  echo "<option value='" . $row["category_name"] . "'>" . $row["category_name"] . "</option>";
-              }
-          } else {
-              echo "<option>No categories found</option>";
-          }
-          ?>
-        </select>
-        <div class="row">
-          <div class="col-12 col-md-6">
-            <h3>Ingredients</h3>
-            <div id="ingredientContainer">
-              <!-- Ingredients will be dynamically added here -->
-            </div>
-
-            <div class="text-end my-2">
-              <button type="button" class="btn btn-sm btn-outline-primary add-ingredient w-100">+ Add more</button>
-            </div>
-          </div>
-          <div class="col-12 col-md-6">
-            <h3>Instructions</h3>
-            <div id="instructionContainer">
-              <!-- Instructions will be dynamically added here -->
-            </div>
-            <div class="text-end my-2">
-              <button type="button" class="btn btn-sm btn-outline-primary add-instruction w-100">+ Add more</button>
-            </div>
-          </div>
-        </div>
-
-        <hr>
-
-        <div class="row">
-          <div class="col text-center">
-            <h3>Final Output</h3>
-            <div class="shadow border border-opacity-50 mt-2" style="width: 200px; height: 200px; margin: 0 auto; text-align: center; display: flex; align-items: center; justify-content: center;">
-              <img src="../assets/img/questionmark.jpg" style="width: 180px; height: 180px;" class="image-preview">
-            </div>
-            <input type="file" id="image" accept="image/*" class="form-control form-control-sm mt-4 mb-3 profile-image-input">
-          </div>
-        </div>
-
-        <div class="text-center mt-2">
-          <button type="button" id="postRecipeBtn" class="btn btn-primary">Post Recipe</button>
-        </div>
-        
-      </div>
-    </div>
-  </div>
 </div>
 
 <script>
@@ -399,7 +267,7 @@
                             <div class="d-flex justify-content-around">
                                 <img src="data:image/jpeg;base64,${recipe.image_data || '../assets/img/default.png'}" class="img-fluid w-25">
                                 <div class="my-auto">
-                                    <label class="fw-semibold">${recipe.recipe_data.posted_by_name}</label>
+                                    <label class="fw-semibold" id="posted_by">${recipe.recipe_data.posted_by_name}</label>
                                     <p>${formatDate(recipe.recipe_data.date_updated)}</p>
                                 </div>
                             </div>
@@ -418,9 +286,13 @@
             // Check if the email is the same as the session email
             if (userEmail !== recipe.recipe_data.posted_by) {
                 recipeHtml += `
-                                <button type="button" class="btn bg-none">
-                                    <img src="../assets/img/bookmark.png" class="img-fluid" width="40px" title="Bookmark">
-                                </button>`;
+                               <button type="button" class="btn bg-none bookmark-button" data-index="${index}" data-bookmarked="${recipe.bookmarked}">
+                                    <img src="${recipe.bookmarked ? '../assets/img/bookmarked.png' : '../assets/img/bookmark.png'}" class="img-fluid bookmark-icon" width="40px" title="${recipe.bookmarked ? 'Bookmarked' : 'Bookmark'}">
+                                </button>
+
+                                <!-- Include a hidden input field to store recipe_id -->
+                                <input type="hidden" class="recipe-id" value="${recipe.recipe_data.recipe_id}">
+                                `;
             }
 
             recipeHtml += `</div>
@@ -500,6 +372,81 @@
         var date = new Date(dateString);
         var options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
         return date.toLocaleDateString('en-US', options);
+    }
+
+    // Function to check bookmark status for each recipe
+    function checkBookmarkStatus() {
+        $('.bookmark-button').each(function() {
+            var index = $(this).data('index');
+            var recipeId = $('.recipe-id').eq(index).val();
+            var bookmarkButton = $(this);
+
+            // AJAX request to check if the recipe is bookmarked
+            $.ajax({
+                url: '../api/isBookmarked.php',
+                method: 'POST',
+                data: { recipe_id: recipeId },
+                success: function(response) {
+                    var data = JSON.parse(response);
+                    if (data.isBookmarked) {
+                        bookmarkButton.find('.bookmark-icon').attr('src', '../assets/img/bookmarked.png');
+                        bookmarkButton.data('bookmarked', true);
+                    } else {
+                        bookmarkButton.find('.bookmark-icon').attr('src', '../assets/img/bookmark.png');
+                        bookmarkButton.data('bookmarked', false);
+                    }
+                    
+                    // Add event listener to toggle bookmark on click
+                    bookmarkButton.off('click').on('click', function() {
+                        var isBookmarked = bookmarkButton.data('bookmarked');
+                        if (isBookmarked) {
+                            removeBookmark(recipeId);
+                        } else {
+                            addBookmark(recipeId);
+                        }
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX Error:', error);
+                }
+            });
+        });
+    }
+
+    // Check bookmark status when the page loads
+    $(document).ready(function() {
+        checkBookmarkStatus();
+
+        // Set up a timer to refresh bookmark status every 1 minute (adjust as needed)
+        setInterval(checkBookmarkStatus, 500); // 60000 milliseconds = 1 minute
+    });
+
+    // Function to add bookmark
+    function addBookmark(recipeId) {
+        $.ajax({
+            url: '../api/add_bookmark.php',
+            type: 'POST',
+            data: { recipe_id: recipeId},
+            success: function(response) {
+            },
+            error: function(xhr, status, error) {
+                console.error("Error adding bookmark:", error);
+            }
+        });
+    }
+
+    // Function to remove bookmark
+    function removeBookmark(recipeId) {
+        $.ajax({
+            url: '../api/remove_bookmark.php',
+            type: 'POST',
+            data: { recipe_id: recipeId},
+            success: function(response) {
+            },
+            error: function(xhr, status, error) {
+                console.error("Error removing bookmark:", error);
+            }
+        });
     }
   });
 </script>

@@ -4,7 +4,7 @@ session_start();
 
 $response = array();
 
-if(isset($_POST['username']) && isset($_POST['email']) && isset($_POST['password'])) {
+if(!empty($_POST['username']) && !empty($_POST['email']) && !empty($_POST['password'])) {
     $username = trim($_POST['username']);
     $email = trim($_POST['email']);
     $password = trim($_POST['password']);
@@ -23,6 +23,7 @@ if(isset($_POST['username']) && isset($_POST['email']) && isset($_POST['password
         } else {
             $insert_sql = "INSERT INTO tbl_users (name, username, email, password) VALUES ('$username', '$username', '$email', '$hashed_password')";
             if ($conn->query($insert_sql) === TRUE) {
+                $response['success'] = "User registered successfully";
             } else {
                 $response['error'] = "Error: " . $insert_sql . "<br>" . $conn->error;
             }
@@ -31,7 +32,7 @@ if(isset($_POST['username']) && isset($_POST['email']) && isset($_POST['password
     
     $conn->close();
 } else {
-    $response['error'] = "Fields are required.";
+    $response['error'] = "All fields are required.";
 }
 
 echo json_encode($response);

@@ -9,7 +9,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $instructions = $_POST['instructions'];
     $posted_by = $_SESSION['email'];
     $isPublic = 1;
-    $isBookmarked = 0;
     $date_updated = date("Y-m-d H:i:s");
 
     if (!empty($_FILES['image']['tmp_name']) && file_exists($_FILES['image']['tmp_name'])) {
@@ -19,8 +18,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $image = null;
     }
 
-    $sql = "INSERT INTO tbl_recipes (recipe_name, posted_by, category, ingredients, instructions, image, isPublic, isBookmarked, date_updated)
-            VALUES ('$recipe_name', '$posted_by', '$category', '$ingredients', '$instructions', '$image', '$isPublic', $isBookmarked, '$date_updated')";
+    $sql = "INSERT INTO tbl_recipes (recipe_name, posted_by, category, ingredients, instructions, image, isPublic, date_updated)
+            VALUES ('$recipe_name', '$posted_by', '$category', '$ingredients', '$instructions', '$image', '$isPublic', '$date_updated')";
 
     if ($conn->query($sql) === TRUE) {
         echo "Recipe added successfully.";
