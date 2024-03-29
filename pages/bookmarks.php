@@ -293,3 +293,71 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="modal2" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-5 shadow-lg">
+      <div class="text-end p-3">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-3">
+        <h3 class="text-center">JM's Recipe</h3>
+
+        <hr>
+
+        <div class="container my-3">
+            <div class="d-flex justify-content-around">
+              <div class="my-5">
+                  <img src="../assets/img/default.png" class="img-fluid me-2 rounded-circle" width="50px">
+              </div>
+              <div class="w-100 rounded p-2">
+                  <p>January 5, 2023 at 5:01pm</p>
+                  
+                  <h5 class="fw-bold">Juan Dela Cruz</h5>
+  
+                  <label>Thats amazing!</label>
+              </div>
+
+              <div class="text-center my-auto">
+                  <img src="../assets/img/message.png" class="img-fluid">
+                  <a href="#" class="fw-bold">Reply</a>
+              </div>
+
+            </div>
+
+            <div class="d-flex justify-content-around">
+                <div class="vr"></div>
+                
+                <div class="my-5">
+                    <img src="../assets/img/default.png" class="img-fluid me-2 rounded-circle" width="50px">
+                </div>
+                <div class="rounded p-2">
+                    <p>January 5, 2023 at 5:23pm</p>
+                    
+                    <h5 class="fw-bold">Jennifer Dizon</h5>
+    
+                    <label>I totally agree!</label>
+                </div>
+
+                <div class="text-center my-auto">
+                    <img src="../assets/img/message.png" class="img-fluid"><br>
+                    <a href="#" class="fw-bold">Reply</a>
+                </div>
+                
+  
+            </div>
+
+        </div>
+
+        <div class="d-flex justify-content-around">
+
+            <input class="form-control w-100" type="text" placeholder="Write a comment…" aria-label="default input example">
+            
+            <a href=""><img src="../assets/img/send.svg" class="img-fluid ms-2" width="35px"></a>
+            
+        </div>
+
+      </div>
+      
+    </div>
+  </div>
+</div>
