@@ -23,6 +23,9 @@
     <?php include 'components/header.php'; ?>
 
     <div class="container-fluid">
+      <div class="container border border-1 rounded my-3 p-3 text-center">
+            <h1>Welcome to Dishcovery!</h1>
+        </div>
 
         <div class="d-flex justify-content-around">
 
@@ -280,12 +283,13 @@
                                 <button type="button" class="btn bg-none click-button" data-index="${index}">
                                     <img src="../assets/img/click.png" class="img-fluid" title="Ingredients">
                                 </button>
-                                <button type="button" class="btn bg-none">
-                                    <img src="../assets/img/heart.png" class="img-fluid" title="Donate">
-                                </button>`;
+                                `;
             // Check if the email is the same as the session email
             if (userEmail !== recipe.recipe_data.posted_by) {
                 recipeHtml += `
+                                <button type="button" class="btn bg-none">
+                                    <img src="../assets/img/heart.png" class="img-fluid" title="Donate">
+                                </button>
                                <button type="button" class="btn bg-none bookmark-button" data-index="${index}" data-bookmarked="${recipe.bookmarked}">
                                     <img src="${recipe.bookmarked ? '../assets/img/bookmarked.png' : '../assets/img/bookmark.png'}" class="img-fluid bookmark-icon" width="40px" title="${recipe.bookmarked ? 'Bookmarked' : 'Bookmark'}">
                                 </button>
