@@ -28,28 +28,29 @@
 
         <div class="d-flex justify-content-around">
 
-            <img src="../assets/img/search.png" class="img-fluid me-2" id ="searchbar" width="35px">
-            
-            <input class="form-control w-100" type="text" id="search" placeholder="Search Dishcovery.." aria-label="default input example">
+          <img src="../assets/img/search.png" class="img-fluid me-2" id ="searchbar" width="35px">
 
-        </div>
+          <input class="form-control w-100" type="text" id="search" placeholder="Search Dishcovery.." aria-label="default input example">
 
-        <div class="container border border-1 rounded my-3 p-3">
-            <div class="d-flex justify-content-around">
-                <img src="<?php echo $image_source; ?>" class="img-fluid me-2" width="50px">
-                
-                <button type="button" class="btn bg-none w-100 text-start border" data-bs-toggle="modal" data-bs-target="#modal1">
-                    <img src="../assets/img/write.png" class="img-fluid me-2" title="Post Recipe">    
-                    Do you have something to share, <?php echo $fullname; ?>?
-                </button>
+          </div>
 
-            </div>
-        </div>
+          <div class="container border border-1 rounded my-3 p-3">
+          <div class="d-flex justify-content-around">
+              <img src="<?php echo $image_source; ?>" class="img-fluid me-2" width="50px">
+              
+              <button type="button" class="btn bg-none w-100 text-start border" data-bs-toggle="modal" data-bs-target="#modal1">
+                  <img src="../assets/img/write.png" class="img-fluid me-2" title="Post Recipe">    
+                  Do you have something to share, <?php echo $fullname; ?>?
+              </button>
 
-        <div id="recipeContainer" class="container"></div>
-          
+          </div>
+      </div>
+
+      <div id="recipeContainer" class="container"></div>
+
     </div>
-<!-- Modal -->
+  </div>
+</div>
 <div class="modal fade" id="modal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg">  
     <div class="modal-content rounded-5 shadow-lg">
@@ -118,119 +119,137 @@
   </div>
 </div>
 
+<div class="modal fade" id="modal2" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-5 shadow-lg">
+            <div class="text-end p-3">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-3">
+                <h3 class="text-center modal-recipe-title"></h3>
+
+                <hr>
+
+                <!-- Placeholder for comments -->
+                <div class="comments-container" style="max-height: 500px; overflow-y: auto;"></div>
+
+                <div class="d-flex justify-content-around">
+                    <input id="commentInputModal" class="form-control w-75 me-2 comment-input-modal" type="text" placeholder="Write a comment…" aria-label="default input example">
+                    <button id="addCommentBtnModal" class="btn btn-outline-primary add-comment-btn-modal">Send</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script>
   $(document).ready(function() {
-    // Function to handle adding ingredient rows
     $('.add-ingredient').click(function() {
-      var newIngredientRow = `
-        <div class="row ingredient-row">
-          <div class="col-sm-4">
-            <input type="number" class="form-control qty-input" placeholder="Qty" min="1" required>
-          </div>
-          <div class="col-sm-8">
-            <input type="text" class="form-control title-input" placeholder="Ingredient Title" required>
-          </div>
-        </div>`;
-      $('#ingredientContainer').append(newIngredientRow);
+        var newIngredientRow = `
+            <div class="row ingredient-row">
+                <div class="col-sm-4">
+                    <input type="number" class="form-control qty-input" placeholder="Qty" min="1" required>
+                </div>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control title-input" placeholder="Ingredient Title" required>
+                </div>
+            </div>`;
+        $('#ingredientContainer').append(newIngredientRow);
     });
 
-    // Function to handle adding instruction steps
     $('.add-instruction').click(function() {
-      var newInstructionStep = `
-        <div class="row instruction-step">
-          <div class="col-12">
-            <input type="text" class="form-control instruction-input" placeholder="Instruction Step" required>
-          </div>
-        </div>`;
-      $('#instructionContainer').append(newInstructionStep);
+        var newInstructionStep = `
+            <div class="row instruction-step">
+                <div class="col-12">
+                    <input type="text" class="form-control instruction-input" placeholder="Instruction Step" required>
+                </div>
+            </div>`;
+        $('#instructionContainer').append(newInstructionStep);
     });
+});
+</script>
 
-    // Function to handle form submission
+<script>
     $('#postRecipeBtn').click(function() {
-      // Check if all required fields are filled
-      if ($('#recipe_name').val() && $('#categorySelect').val() && $('#image').val()) {
-        var formData = new FormData();
-        var fileInput = $('#image')[0].files[0];
-        formData.append('image', fileInput);
-        formData.append('recipe_name', $('#recipe_name').val());
-        formData.append('category_name', $('#categorySelect').val());
+        if ($('#recipe_name').val() && $('#categorySelect').val() && $('#image').val()) {
+            var formData = new FormData();
+            var fileInput = $('#image')[0].files[0];
+            formData.append('image', fileInput);
+            formData.append('recipe_name', $('#recipe_name').val());
+            formData.append('category_name', $('#categorySelect').val());
 
-        var ingredients = [];
-        $('.ingredient-row').each(function() {
-          var qty = $(this).find('.qty-input').val();
-          var title = $(this).find('.title-input').val();
-          if (qty && title) {
-            ingredients.push({ qty: qty, title: title });
-          }
-        });
-        console.log("Ingredients:", ingredients); // Debugging
+            var ingredients = [];
+            $('.ingredient-row').each(function() {
+                var qty = $(this).find('.qty-input').val();
+                var title = $(this).find('.title-input').val();
+                if (qty && title) {
+                    ingredients.push({ qty: qty, title: title });
+                }
+            });
+            formData.append('ingredients', JSON.stringify(ingredients));
 
-        formData.append('ingredients', JSON.stringify(ingredients));
+            var instructions = [];
+            $('.instruction-input').each(function() {
+                var step = $(this).val();
+                if (step) {
+                    instructions.push(step);
+                }
+            });
+            formData.append('instructions', JSON.stringify(instructions));
 
-        var instructions = [];
-        $('.instruction-input').each(function() {
-          var step = $(this).val();
-          if (step) {
-            instructions.push(step);
-          }
-        });
-        console.log("Instructions:", instructions); // Debugging
-
-        formData.append('instructions', JSON.stringify(instructions));
-
-        // AJAX request to submit form data
-        $.ajax({
-          url: '../api/add_recipe.php',
-          type: 'POST',
-          data: formData,
-          contentType: false,
-          processData: false,
-          success: function(response) {
-            console.log(response);
-            alert("Recipe added successfully.");
-            $('#modal1').modal('hide');
-            $('#recipe_name').val('');
-            $('#categorySelect').val('');
-            $('.qty-input').val('');
-            $('.title-input').val('');
-            $('.instruction-input').val('');
-            $('#image').val('');
-            // Reset image preview to default
-            $('.image-preview').attr('src', '../assets/img/questionmark.jpg');
-          },
-          error: function(xhr, status, error) {
-            console.error(error);
-          }
-        });
-      } else {
-        alert("Please fill in all required fields.");
-      }
+            $.ajax({
+                url: '../api/add_recipe.php',
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(response) {
+                    alert("Recipe added successfully.");
+                    $('#modal1').modal('hide');
+                    $('#recipe_name').val('');
+                    $('#categorySelect').val('');
+                    $('.qty-input').val('');
+                    $('.title-input').val('');
+                    $('.instruction-input').val('');
+                    $('#image').val('');
+                    $('.image-preview').attr('src', '../assets/img/questionmark.jpg');
+                },
+                error: function(xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        } else {
+            alert("Please fill in all required fields.");
+        }
     });
+</script>
 
-    // Update image preview when selecting a new image
+<script>
     $('#image').change(function() {
-      var reader = new FileReader();
-      reader.onload = function(e) {
-        $('.image-preview').attr('src', e.target.result);
-      }
-      reader.readAsDataURL(this.files[0]);
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            $('.image-preview').attr('src', e.target.result);
+        }
+        reader.readAsDataURL(this.files[0]);
     });
+</script>
 
-    var response; // Define response variable here
+<script>
+    var response;
 
     $.ajax({
         url: '../api/fetch_my_recipes.php',
         type: 'GET',
         dataType: 'json',
         success: function(data) {
-            response = data; // Assign response data to the variable
-            if(response.status === 'success') {
-                // Sort recipes by date_updated in descending order to display the most recent one first
+            response = data;
+            if (response.status === 'success') {
                 response.recipes.sort((a, b) => new Date(b.recipe_data.date_updated) - new Date(a.recipe_data.date_updated));
-
-                renderRecipes(response.recipes); // Render all recipes initially
+                renderRecipes(response.recipes);
             } else {
-                console.log(response.message);
+                $('#recipeContainer').append('<div class="d-flex justify-content-center align-items-center" style="height: 100%;"><div style="max-height: 350px; max-width: 350px;"><img src="../assets/img/NO POSTED.png" class="img-fluid"></div></div>');
             }
         },
         error: function(xhr, status, error) {
@@ -239,7 +258,7 @@
     });
 
     function renderRecipes(recipes) {
-        $('#recipeContainer').empty(); // Clear existing recipes
+        $('#recipeContainer').empty();
 
         $.each(recipes, function(index, recipe) {
             var userEmail = '<?php echo $_SESSION['email']; ?>';
@@ -264,19 +283,27 @@
                                 <button type="button" class="btn bg-none click-button" data-index="${index}">
                                     <img src="../assets/img/click.png" class="img-fluid" title="Ingredients">
                                 </button>
+                                
                                 `;
-            // Check if the email is the same as the session email
-            if (userEmail !== recipe.recipe_data.posted_by) {
-                recipeHtml += `<button type="button" class="btn bg-none">
-                                    <img src="../assets/img/heart.png" class="img-fluid" title="Donate">
-                                </button>
-                               <button type="button" class="btn bg-none bookmark-button" data-index="${index}" data-bookmarked="${recipe.bookmarked}">
-                                    <img src="${recipe.bookmarked ? '../assets/img/bookmarked.png' : '../assets/img/bookmark.png'}" class="img-fluid bookmark-icon" width="40px" title="${recipe.bookmarked ? 'Bookmarked' : 'Bookmark'}">
-                                </button>
 
-                                <!-- Include a hidden input field to store recipe_id -->
-                                <input type="hidden" class="recipe-id" value="${recipe.recipe_data.recipe_id}">
-                                `;
+            if (userEmail !== recipe.recipe_data.posted_by) {
+                recipeHtml += `
+                                    <button type="button" class="btn bg-none">
+                                        <img src="../assets/img/heart.png" class="img-fluid" title="Donate">
+                                    </button>
+                                    <button type="button" class="btn bg-none bookmark-button" data-index="${index}" data-bookmarked="${recipe.bookmarked}">
+                                        <img src="${recipe.bookmarked ? '../assets/img/bookmarked.png' : '../assets/img/bookmark.png'}" class="img-fluid bookmark-icon" width="40px" title="${recipe.bookmarked ? 'Bookmarked' : 'Bookmark'}">
+                                    </button>
+                                    <input type="hidden" class="recipe-id" value="${recipe.recipe_data.recipe_id}">
+                                    `;
+            }
+            if (userEmail === recipe.recipe_data.posted_by) {
+                recipeHtml += `
+                                    <button type="button" class="btn bg-none">
+                                        <img src="../assets/img/delete.png" style="width:40px; height: 40px;"class="img-fluid" title="Delete Recipe">
+                                    </button>
+                                    <input type="hidden" class="recipe-id" value="${recipe.recipe_data.recipe_id}">
+                                    `;
             }
 
             recipeHtml += `</div>
@@ -287,7 +314,7 @@
                         <div class="col-12 col-lg-6">
                             <div class="p-2 border border-1 rounded p-3" style="max-height: 300px; overflow-y: auto;">
                                 <h5>Instructions:</h5>`;
-            var instructions = JSON.parse(recipe.recipe_data.instructions); // Parse the instructions string into an array
+            var instructions = JSON.parse(recipe.recipe_data.instructions);
             $.each(instructions, function(i, instruction) {
                 recipeHtml += `<label>Step ${i + 1}: ${instruction}</label><br>`;
             });
@@ -297,17 +324,22 @@
                         </div>
                     </div>
                 </div>
-                <div class="d-flex justify-content-around">
-                    <img src="../assets/img/comment.png" type="button" class="img-fluid my-auto" width="50px" data-bs-toggle="modal" data-bs-target="#modal2">
+                <div class="recipecomment d-flex justify-content-around" data-recipe-id="${recipe.recipe_data.recipe_id}" data-posted-by="${recipe.recipe_data.posted_by_name}">
+                <img src="../assets/img/comment.png" class="img-fluid" width="50px" data-bs-toggle="modal" data-bs-target="#modal2" data-recipe-id="${recipe.recipe_data.recipe_id}">
                     <div class="input-group">
-                        <input class="form-control" type="text" placeholder="Write a comment">
-                        <button class="btn btn-outline-light" type="button">
+                        <input class="form-control comment-input" type="text" placeholder="Write a comment">
+                        <button class="btn btn-outline-light add-comment-btn" type="button">
                             <img src="../assets/img/send.svg" class="img-fluid" width="25px">
                         </button>
                     </div>
                 </div>`;
 
             $('#recipeContainer').append(recipeHtml);
+            $('.add-comment-btn').off('click').on('click', function() {
+                var recipeId = $(this).closest('.recipecomment').data('recipe-id');
+                var commentInput = $(this).siblings('.comment-input');
+                var commentDescription = commentInput.val();
+            });
         });
     }
 
@@ -339,17 +371,17 @@
 
         $('#ingredientsModal').modal('show');
     });
+</script>
 
-    // Function to filter recipes when the search image is clicked
+<script>
     $('#searchbar').click(function() {
-        var searchTerm = $('#search').val().toLowerCase(); // Get the search term from the input field and convert to lowercase
+        var searchTerm = $('#search').val().toLowerCase();
 
-        // Filter recipes based on the search term
         var filteredRecipes = response.recipes.filter(function(recipe) {
             return recipe.recipe_data.recipe_name.toLowerCase().includes(searchTerm);
         });
 
-        renderRecipes(filteredRecipes); // Render filtered recipes
+        renderRecipes(filteredRecipes);
     });
 
     function formatDate(dateString) {
@@ -357,7 +389,212 @@
         var options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
         return date.toLocaleDateString('en-US', options);
     }
-  });
+
+    function checkBookmarkStatus() {
+        $('.bookmark-button').each(function() {
+            var index = $(this).data('index');
+            var recipeId = $('.recipe-id').eq(index).val();
+            var bookmarkButton = $(this);
+
+            $.ajax({
+                url: '../api/isBookmarked.php',
+                method: 'POST',
+                data: { recipe_id: recipeId },
+                success: function(response) {
+                    var data = JSON.parse(response);
+                    if (data.isBookmarked) {
+                        bookmarkButton.find('.bookmark-icon').attr('src', '../assets/img/bookmarked.png');
+                        bookmarkButton.data('bookmarked', true);
+                    } else {
+                        bookmarkButton.find('.bookmark-icon').attr('src', '../assets/img/bookmark.png');
+                        bookmarkButton.data('bookmarked', false);
+                    }
+                    
+                    bookmarkButton.off('click').on('click', function() {
+                        var isBookmarked = bookmarkButton.data('bookmarked');
+                        if (isBookmarked) {
+                            removeBookmark(recipeId);
+                        } else {
+                            addBookmark(recipeId);
+                        }
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX Error:', error);
+                }
+            });
+        });
+    }
+</script>
+
+<script>
+    $(document).ready(function() {
+        checkBookmarkStatus();
+        setInterval(checkBookmarkStatus, 500);
+    });
+
+    function addBookmark(recipeId) {
+        $.ajax({
+            url: '../api/add_bookmark.php',
+            type: 'POST',
+            data: { recipe_id: recipeId},
+            success: function(response) {
+            },
+            error: function(xhr, status, error) {
+                console.error("Error adding bookmark:", error);
+            }
+        });
+    }
+
+    function removeBookmark(recipeId) {
+        $.ajax({
+            url: '../api/remove_bookmark.php',
+            type: 'POST',
+            data: { recipe_id: recipeId},
+            success: function(response) {
+            },
+            error: function(xhr, status, error) {
+                console.error("Error removing bookmark:", error);
+            }
+        });
+    }
+</script>
+
+<script>
+    $(document).on('click', '.add-comment-btn', function() {
+    var recipeId = $(this).closest('.recipecomment').data('recipe-id');
+    var commentInput = $(this).siblings('.comment-input');
+
+    if (commentInput.length > 0) {
+        var commentDescription = commentInput.val();
+
+        if (commentDescription.trim() !== '') {
+            var formData = new FormData();
+            formData.append('recipe_id', recipeId);
+            formData.append('comment_description', commentDescription);
+
+            $.ajax({
+                url: '../api/add_comment.php',
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(response) {
+                    alert("Comment added successfully.");
+                    commentInput.val('');
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error adding comment:", error);
+                }
+            });
+        } else {
+            alert("Please enter a non-empty comment.");
+        }
+    } else {
+        console.error("Comment input element not found.");
+    }
+});
+</script>
+
+
+<script>
+$(document).on('click', '.recipecomment img[data-bs-toggle="modal"]', function() {
+    var button = $(this);
+    var recipeId = button.closest('.recipecomment').data('recipe-id');
+
+    // Fetch comments for the recipe
+    fetchComments(recipeId);
+
+    // Set the modal title
+    var modalTitle = $('#modal2').find('.modal-recipe-title');
+    var postedByName = button.closest('.recipecomment').data('posted-by');
+    modalTitle.text(postedByName + "'s Recipe");
+
+    var addCommentBtnModal = $('#modal2').find('.add-comment-btn-modal');
+    var commentInputModal = $('#modal2').find('.comment-input-modal');
+
+    addCommentBtnModal.off('click').on('click', function() {
+        var commentDescription = commentInputModal.val();
+        if (commentDescription.trim() !== '') {
+            addComment(recipeId, commentDescription);
+        } else {
+            alert("Please enter a non-empty comment.");
+        }
+    });
+
+    // Show the modal
+    $('#modal2').modal('show');  
+});
+
+
+// Function to fetch comments for a recipe
+function fetchComments(recipeId) {
+    $.ajax({
+        url: '../api/fetch_comments.php',
+        type: 'GET',
+        data: { recipe_id: recipeId },
+        dataType: 'json',
+        success: function(data) {
+            var commentsContainer = $('.comments-container');
+            commentsContainer.empty();
+
+            if (data.status === 'success') {
+                var comments = data.comments;
+                if (Array.isArray(comments) && comments.length > 0) {
+                    $.each(comments, function(index, comment) {
+                        var formattedDate = formatDate(comment.date_created);
+                        var commentHtml = `
+                            <div class="container my-3">
+                                <div class="d-flex justify-content-around">
+                                    <div class="my-5">
+                                        <img src="data:image/jpeg;base64,${comment.prof_pic}" class="img-fluid me-2 rounded-circle" width="50px">
+                                    </div>
+                                    <div class="w-100 rounded p-2">
+                                        <p>${formattedDate}</p>
+                                        <h5 class="fw-bold">${comment.name}</h5>
+                                        <label>${comment.comment_description}</label>
+                                    </div>
+                                </div>
+                            </div>`;
+                        commentsContainer.append(commentHtml);
+                    });
+                } else {
+                    commentsContainer.append('<center><p>No comments found.</p></center>');
+                }
+            } else if (data && data.status === 'error' && data.message === 'No comments found for this recipe') {
+                commentsContainer.append('<center><p>No comments found for this recipe.</p></center>');
+            } else {
+                console.error("Empty response or API error:", data);
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error("Error fetching comments:", error);
+        }
+    });
+}
+
+// Function to add a comment for a recipe
+function addComment(recipeId, commentDescription) {
+    var formData = new FormData();
+    formData.append('recipe_id', recipeId);
+    formData.append('comment_description', commentDescription);
+
+    $.ajax({
+        url: '../api/add_comment.php',
+        type: 'POST',
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function(response) {
+            alert("Comment added successfully.");
+            fetchComments(recipeId); // Refresh comments after adding a new comment
+            $('.comment-input-modal').val(''); // Clear the comment input field
+        },
+        error: function(xhr, status, error) {
+            console.error("Error adding comment:", error);
+        }
+    });
+}
 </script>
 
 
@@ -395,72 +632,4 @@
             </div>
         </div>
     </div>
-</div>
-<div class="modal fade" id="modal2" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content rounded-5 shadow-lg">
-      <div class="text-end p-3">
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body p-3">
-        <h3 class="text-center">JM's Recipe</h3>
-
-        <hr>
-
-        <div class="container my-3">
-            <div class="d-flex justify-content-around">
-              <div class="my-5">
-                  <img src="../assets/img/default.png" class="img-fluid me-2 rounded-circle" width="50px">
-              </div>
-              <div class="w-100 rounded p-2">
-                  <p>January 5, 2023 at 5:01pm</p>
-                  
-                  <h5 class="fw-bold">Juan Dela Cruz</h5>
-  
-                  <label>Thats amazing!</label>
-              </div>
-
-              <div class="text-center my-auto">
-                  <img src="../assets/img/message.png" class="img-fluid">
-                  <a href="#" class="fw-bold">Reply</a>
-              </div>
-
-            </div>
-
-            <div class="d-flex justify-content-around">
-                <div class="vr"></div>
-                
-                <div class="my-5">
-                    <img src="../assets/img/default.png" class="img-fluid me-2 rounded-circle" width="50px">
-                </div>
-                <div class="rounded p-2">
-                    <p>January 5, 2023 at 5:23pm</p>
-                    
-                    <h5 class="fw-bold">Jennifer Dizon</h5>
-    
-                    <label>I totally agree!</label>
-                </div>
-
-                <div class="text-center my-auto">
-                    <img src="../assets/img/message.png" class="img-fluid"><br>
-                    <a href="#" class="fw-bold">Reply</a>
-                </div>
-                
-  
-            </div>
-
-        </div>
-
-        <div class="d-flex justify-content-around">
-
-            <input class="form-control w-100" type="text" placeholder="Write a comment…" aria-label="default input example">
-            
-            <a href=""><img src="../assets/img/send.svg" class="img-fluid ms-2" width="35px"></a>
-            
-        </div>
-
-      </div>
-      
-    </div>
-  </div>
 </div>
