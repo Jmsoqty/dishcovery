@@ -420,20 +420,98 @@ function fetchComments(recipeId) {
                 if (Array.isArray(comments) && comments.length > 0) {
                     $.each(comments, function(index, comment) {
                         var formattedDate = formatDate(comment.date_created);
+                        var sessionEmail = '<?php echo $_SESSION["email"]; ?>';
+                        var showIcons = sessionEmail === comment.comment_by;
+                        var pencilIcon = showIcons ? '<img src="../assets/img/pencil.svg" class="edit-comment img-fluid" data-comment-id="' + comment.comment_id + '" style="width: 25px; height: 25px; vertical-align: middle; margin-right: 10px;">' : '';
+                        var trashIcon = showIcons ? '<img src="../assets/img/trash.svg" class="delete-comment img-fluid" data-comment-id="' + comment.comment_id + '" style="width: 50px; height: 50px; vertical-align: middle;">' : '';
                         var commentHtml = `
-                            <div class="container my-3">
-                                <div class="d-flex justify-content-around">
-                                    <div class="my-5">
+                            <div class="container">
+                                <div class="d-flex justify-content-around align-items-center">
+                                    <div>
                                         <img src="data:image/jpeg;base64,${comment.prof_pic}" class="img-fluid me-2 rounded-circle" width="50px">
                                     </div>
                                     <div class="w-100 rounded p-2">
                                         <p>${formattedDate}</p>
                                         <h5 class="fw-bold">${comment.name}</h5>
-                                        <label>${comment.comment_description}</label>
+                                        <label class="comment-description">${comment.comment_description}</label>
+                                        <input type="text" class="form-control edit-input mb-2" style="display: none;">
+                                        <button class="btn btn-primary btn-sm save-edit" style="display: none;">Save</button>
+                                        <button class="btn btn-secondary btn-sm cancel-edit" style="display: none;">Cancel</button>
+                                    </div>
+                                    <div class="text-center my-auto">
+                                        ${pencilIcon}
+                                    </div>
+                                    <div class="text-center my-auto">
+                                        ${trashIcon}
                                     </div>
                                 </div>
-                            </div>`;
+                            </div>
+                            <hr>
+                    `;
                         commentsContainer.append(commentHtml);
+                    });
+
+                    $('.edit-comment').click(function() {
+                        var parent = $(this).closest('.container');
+                        parent.find('.comment-description').hide();
+                        parent.find('.edit-input').val(parent.find('.comment-description').text()).show().focus();
+                        parent.find('.save-edit').show();
+                        parent.find('.cancel-edit').show();
+                    });
+
+                    $('.delete-comment').click(function() {
+                        if (confirm("Are you sure you want to delete this comment?")) {
+                            var commentId = $(this).data('comment-id');
+                            $.ajax({
+                                url: '../api/delete_comment.php',
+                                method: 'POST',
+                                data: { action: 'delete_comment', comment_id: commentId },
+                                dataType: 'json',
+                                success: function(response) {
+                                    if (response.status === 'success') {
+                                        // Refresh comments after deletion
+                                        fetchComments(recipeId);
+                                    } else {
+                                        alert('Error deleting comment: ' + response.message);
+                                    }
+                                },
+                                error: function(xhr, status, error) {
+                                    console.error("Error deleting comment:", error);
+                                }
+                            });
+                        }
+                    });
+                    
+                    $('.cancel-edit').click(function() {
+                        var parent = $(this).closest('.container');
+                        parent.find('.comment-description').show();
+                        parent.find('.edit-input').hide();
+                        parent.find('.btn-group').hide();
+                        parent.find('.save-edit').hide();
+                        parent.find('.cancel-edit').hide();
+                    });
+
+                    $('.save-edit').click(function() {
+                        var parent = $(this).closest('.container');
+                        var commentId = parent.find('.edit-comment').data('comment-id');
+                        var newComment = parent.find('.edit-input').val();
+                        $.ajax({
+                            url: '../api/edit_comment.php',
+                            method: 'POST',
+                            data: { action: 'edit_comment', comment_id: commentId, new_comment: newComment },
+                            dataType: 'json',
+                            success: function(response) {
+                                if (response.status === 'success') {
+                                    // Refresh comments after editing
+                                    fetchComments(recipeId);
+                                } else {
+                                    alert('Error editing comment: ' + response.message);
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                console.error("Error editing comment:", error);
+                            }
+                        });
                     });
                 } else {
                     commentsContainer.append('<center><p>No comments found.</p></center>');
