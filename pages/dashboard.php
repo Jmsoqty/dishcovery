@@ -161,12 +161,60 @@
     </div>
 </div>
 
+<div class="modal fade" id="editRecipeModal" tabindex="-1" aria-labelledby="editRecipeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editRecipeModalLabel">Edit Recipe</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editRecipeForm">
+                    <div class="mb-3">
+                        <label for="editRecipeName" class="form-label">Recipe Name</label>
+                        <input type="text" class="form-control" id="editRecipeName" name="recipeName" required>
+                    </div>
+                    <!-- Container for ingredients -->
+                    <div id="editIngredientContainer">
+                        <!-- Ingredients will be dynamically added here -->
+                    </div>
+                    <div class="text-end my-2">
+                        <button type="button" class="btn btn-sm btn-outline-primary add-ingredient-edit w-100">+ Add more</button>
+                    </div>
+                    <!-- Container for instructions -->
+                    <div id="editInstructionContainer">
+                        <!-- Instructions will be dynamically added here -->
+                    </div>
+                    <div class="text-end my-2">
+                        <button type="button" class="btn btn-sm btn-outline-primary add-instruction-edit w-100">+ Add more</button>
+                    </div>
+                    <!-- Input field for image -->
+                    <div class="row">
+                        <div class="col text-center">
+                            <h3>Final Output</h3>
+                            <div class="shadow border border-opacity-50 mt-2" style="width: 200px; height: 200px; margin: 0 auto; text-align: center; display: flex; align-items: center; justify-content: center;">
+                                <img id="editRecipeImagePreview" src="../assets/img/questionmark.jpg" style="width: 180px; height: 180px;" class="image-preview-edit">
+                            </div>
+                            <input type="file" id="image-edit" accept="image/*" class="form-control form-control-sm mt-4 mb-3 profile-image-input-edit">
+                        </div>
+                    </div>
+                    <!-- Hidden input field for recipe ID -->
+                    <input type="hidden" id="editRecipeId" name="recipeId">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="editRecipeBtn">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
   $(document).ready(function() {
     $('.add-ingredient').click(function() {
         var newIngredientRow = `
-            <div class="row ingredient-row">
+            <div class="row ingredient-row mb-2">
                 <div class="col-sm-4">
                     <input type="number" class="form-control qty-input" placeholder="Qty" min="1" required>
                 </div>
@@ -179,13 +227,36 @@
 
     $('.add-instruction').click(function() {
         var newInstructionStep = `
-            <div class="row instruction-step">
+            <div class="row instruction-step mb-2">
                 <div class="col-12">
                     <input type="text" class="form-control instruction-input" placeholder="Instruction Step" required>
                 </div>
             </div>`;
         $('#instructionContainer').append(newInstructionStep);
     });
+
+    $('.add-ingredient-edit').click(function() {
+            var newIngredientRow = `
+                <div class="row ingredient-row mb-2">
+                    <div class="col-sm-4">
+                        <input type="number" class="form-control qty-input" placeholder="Qty" min="1" required>
+                    </div>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control title-input" placeholder="Ingredient Title" required>
+                    </div>
+                </div>`;
+            $('#editIngredientContainer').append(newIngredientRow);
+        });
+
+        $('.add-instruction-edit').click(function() {
+            var newInstructionStep = `
+                <div class="row instruction-step mb-2">
+                    <div class="col-12">
+                        <input type="text" class="form-control instruction-input" placeholder="Instruction Step" required>
+                    </div>
+                </div>`;
+            $('#editInstructionContainer').append(newInstructionStep);
+        });
 });
 </script>
 
@@ -233,6 +304,7 @@
                     $('.instruction-input').val('');
                     $('#image').val('');
                     $('.image-preview').attr('src', '../assets/img/questionmark.jpg');
+                    location.reload();
                 },
                 error: function(xhr, status, error) {
                     console.error(error);
@@ -249,6 +321,14 @@
         var reader = new FileReader();
         reader.onload = function(e) {
             $('.image-preview').attr('src', e.target.result);
+        }
+        reader.readAsDataURL(this.files[0]);
+    });
+
+    $('#image-edit').change(function() {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            $('.image-preview-edit').attr('src', e.target.result);
         }
         reader.readAsDataURL(this.files[0]);
     });
@@ -317,6 +397,9 @@
             }
             if (userEmail === recipe.recipe_data.posted_by) {
                 recipeHtml += `
+                                    <button type="button" class="btn bg-none edit-recipe-btn" data-bs-toggle="modal" data-bs-target="#editRecipeModal">
+                                        <img src="../assets/img/pencil.svg" style="width:40px; height: 40px;" class="img-fluid" title="Edit Recipe">
+                                    </button>
                                     <button type="button" class="btn bg-none">
                                         <img src="../assets/img/delete.png" style="width:40px; height: 40px;"class="img-fluid" title="Delete Recipe">
                                     </button>
@@ -389,6 +472,107 @@
 
         $('#ingredientsModal').modal('show');
     });
+</script>
+
+<script>
+function populateEditRecipeModal(recipe) {
+    var imageBase64 = recipe.recipe_data.image;
+    var imageElement = document.getElementById('editRecipeImagePreview');
+    imageElement.src = 'data:image/jpeg;base64,' + imageBase64;
+
+    $('#editRecipeName').val(recipe.recipe_data.recipe_name);
+    var ingredients = JSON.parse(recipe.recipe_data.ingredients);
+
+    $('#editIngredientContainer').empty();
+    if (Array.isArray(ingredients)) {
+        ingredients.forEach(function(ingredient) {
+            var ingredientRow = `
+                <div class="row ingredient-row mb-2">
+                    <div class="col-sm-4">
+                        <input type="number" class="form-control qty-input" placeholder="Qty" min="1" required value="${ingredient.qty}">
+                    </div>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control title-input" placeholder="Ingredient Title" required value="${ingredient.title}">
+                    </div>
+                </div>`;
+            $('#editIngredientContainer').append(ingredientRow);
+        });
+    } else {
+        console.error("Ingredients data is not in the expected format:", ingredients);
+    }
+
+    var instructions = JSON.parse(recipe.recipe_data.instructions);
+
+    $('#editInstructionContainer').empty();
+    if (Array.isArray(instructions)) {
+        instructions.forEach(function(instruction, index) {
+            var instructionStep = `
+                <div class="row instruction-step mb-2">
+                    <div class="col-12">
+                        <input type="text" class="form-control instruction-input" placeholder="Instruction Step" required value="${instruction}">
+                    </div>
+                </div>`;
+            $('#editInstructionContainer').append(instructionStep);
+        });
+    } else {
+        console.error("Instructions data is not in the expected format:", instructions);
+    }
+
+    $('#editRecipeId').val(recipe.recipe_data.recipe_id);
+}
+
+$(document).on('click', '.edit-recipe-btn', function() {
+    var index = $(this).closest('.container').index();
+    var recipe = response.recipes[index];
+    populateEditRecipeModal(recipe);
+    $('#editRecipeModal').modal('show');
+});
+
+$('#editRecipeBtn').click(function() {
+    var formData = new FormData();
+    var fileInput = $('#image-edit')[0].files[0];
+    formData.append('image', fileInput);
+    formData.append('recipe_id', $('#editRecipeId').val());
+    formData.append('recipe_name', $('#editRecipeName').val());
+    formData.append('ingredients', JSON.stringify(getIngredientsData()));
+    formData.append('instructions', JSON.stringify(getInstructionsData()));
+
+    $.ajax({
+        url: '../api/edit_recipe.php',
+        type: 'POST',
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function(response) {
+            console.log(response);
+            $('#editRecipeModal').modal('hide');
+            location.reload();
+        },
+        error: function(xhr, status, error) {
+            console.error("Error editing recipe:", error);
+        }
+    });
+});
+
+function getIngredientsData() {
+    var ingredientsData = [];
+    $('.ingredient-row').each(function() {
+        var qty = $(this).find('.qty-input').val();
+        var title = $(this).find('.title-input').val();
+        ingredientsData.push({ qty: qty, title: title });
+    });
+    return ingredientsData;
+}
+
+function getInstructionsData() {
+    var instructionsData = [];
+    $('.instruction-step').each(function() {
+        var instruction = $(this).find('.instruction-input').val();
+        instructionsData.push(instruction);
+    });
+    return instructionsData;
+}
+
 </script>
 
 <script>
