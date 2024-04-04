@@ -23,7 +23,7 @@
 
     <div class="container-fluid">
 
-        <div class="container border border-1 rounded my-3 p-3 text-center">
+        <div class="container border border-1 rounded text-center">
             <h1 id="categoryTitle">Categories</h1>
         </div>
 

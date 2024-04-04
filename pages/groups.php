@@ -21,7 +21,33 @@
   
 <!--  Header -->
 <?php include 'components/header.php'; ?>
+<div class="container-fluid">
+        <div class="d-flex justify-content-around">
 
+            <img src="../assets/img/search.png" class="img-fluid me-2" id ="searchbar" width="35px">
+            
+            <input class="form-control w-100 me-4" type="text" id="search" placeholder="Search.." aria-label="default input example">
+            
+            <img src="../assets/img/add.png" class="img-fluid me-3" id ="create_group" width="35px" title="Create Group">
+            
+            <img src="../assets/img/join.png" class="img-fluid me-3" id ="join_group" width="35px" title="Join Group">
+
+            <img src="../assets/img/dismissal.png" class="img-fluid me-3" id ="visit_group" width="35px" title="Visit Group">
+
+        </div>
+        
+        <div class="container border border-1 rounded my-3 p-3">
+            <div class="d-flex justify-content-around">
+                <img src="<?php echo $image_source; ?>" class="img-fluid me-2" width="50px">
+                
+                <button type="button" class="btn bg-none w-100 text-start border" data-bs-toggle="modal" data-bs-target="#modal1">
+                    <img src="../assets/img/write.png" class="img-fluid me-2" title="Post Recipe">    
+                    Do you have something to share, <?php echo $fullname; ?>?
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <!-- Additional Scripts -->
