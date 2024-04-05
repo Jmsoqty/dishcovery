@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 03, 2024 at 03:10 PM
+-- Generation Time: Apr 05, 2024 at 10:01 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -80,14 +80,6 @@ CREATE TABLE `tbl_comments` (
   `date_created` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `tbl_comments`
---
-
-INSERT INTO `tbl_comments` (`comment_id`, `comment_by`, `recipe_id`, `comment_description`, `date_created`) VALUES
-(46, 'nolascojm.bsit@gmail.com', 10, 'sample', '2024-04-03 06:06:48'),
-(47, 'nolascojm.bsit@gmail.com', 10, 'hey', '2024-04-03 06:12:34');
-
 -- --------------------------------------------------------
 
 --
@@ -97,7 +89,7 @@ INSERT INTO `tbl_comments` (`comment_id`, `comment_by`, `recipe_id`, `comment_de
 CREATE TABLE `tbl_communities` (
   `community_id` int(11) NOT NULL,
   `community_name` varchar(255) NOT NULL,
-  `recipe_id_shared` int(11) NOT NULL,
+  `user_who_joined` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
   `date_created` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -214,19 +206,19 @@ ALTER TABLE `tbl_categories`
 -- AUTO_INCREMENT for table `tbl_comments`
 --
 ALTER TABLE `tbl_comments`
-  MODIFY `comment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
+  MODIFY `comment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
 -- AUTO_INCREMENT for table `tbl_communities`
 --
 ALTER TABLE `tbl_communities`
-  MODIFY `community_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `community_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `tbl_recipes`
 --
 ALTER TABLE `tbl_recipes`
-  MODIFY `recipe_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `recipe_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `tbl_users`
