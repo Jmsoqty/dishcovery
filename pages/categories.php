@@ -169,10 +169,13 @@ document.addEventListener("DOMContentLoaded", function() {
             }
             if (userEmail === recipe.recipe_data.posted_by) {
                 recipeHtml += `
-                                    <button type="button" class="btn bg-none">
-                                        <img src="../assets/img/delete.png" style="width:40px; height: 40px;"class="img-fluid" title="Delete Recipe">
+                                    <button type="button" class="btn bg-none edit-recipe-btn" data-bs-toggle="modal" data-bs-target="#editRecipeModal">
+                                        <img src="../assets/img/pencil.svg" style="width:40px; height: 40px;" class="img-fluid" title="Edit Recipe">
                                     </button>
-                                    <input type="hidden" class="recipe-id" value="${recipe.recipe_data.recipe_id}">
+                                    <button type="button" class="btn bg-none delete-recipe-btn" data-index="${index}" data-recipe-id="${recipe.recipe_data.recipe_id}">
+                                        <img src="../assets/img/delete.png" style="width:40px; height: 40px;" class="img-fluid" title="Delete Recipe">
+                                    </button>
+                                    <input type="hidden" class="recipe-id" value="${recipe.recipe_data.recipe_id}"><input type="hidden" class="recipe-id" value="${recipe.recipe_data.recipe_id}">
                                     `;
             }
 
@@ -216,7 +219,7 @@ document.addEventListener("DOMContentLoaded", function() {
     $(document).on('click', '.click-button', function() {
         var index = $(this).data('index');
         var ingredientsList = response.recipes[index].formatted_ingredients;
-
+        
         $('#ingredientsTable tbody').empty();
 
         var ingredients = ingredientsList.map(function(ingredientString) {
@@ -241,6 +244,32 @@ document.addEventListener("DOMContentLoaded", function() {
 
         $('#ingredientsModal').modal('show');
     });
+
+   $(document).on('click', '.delete-recipe-btn', function() {
+    var recipeId = $(this).closest('.container').find('.recipe-id').val();
+
+    if (confirm("Are you sure you want to delete this recipe?")) {
+        $.ajax({
+            url: '../api/delete_recipe.php',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                recipeId: recipeId
+            },
+            success: function(response) {
+                if (response.status === 'success') {
+                    location.reload();
+                } else {
+                    console.error(response.message);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error("Error deleting recipe:", error);
+            }
+        });
+    }
+});
+
 </script>
 
 <script>
