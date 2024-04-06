@@ -73,7 +73,7 @@
                 <span>
                   <i class="ti ti-star"></i>
                 </span>
-                <span class="hide-menu">Funding</span>
+                <span class="hide-menu">Donations</span>
               </a>
             </li>
             <li class="sidebar-item">

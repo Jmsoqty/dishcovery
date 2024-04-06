@@ -210,6 +210,56 @@
     </div>
 </div>
 
+<div class="modal fade" id="wallet-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="wallet-modal-label">E-Wallet Balance</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-floating mb-3">
+                        <h1 class="text-center" name="balance" id="balance">$100.00</h1>
+                        <label for="balance">Current Balance</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="number" class="form-control" id="donation" name="donation" step="0.01" min="1" max="100000" placeholder="Insert your desired amount">
+                        <label for="donation">Send Funds</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="ti ti-x fs-3"></i> Close</button>
+                    <button type="button" class="btn btn-primary" id="donate-button"><i class="ti ti-edit fs-3"></i> Donate</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+    $(document).ready(function() {
+    $('#donate-button').click(function() {
+        var paymentAmount = $('#donation').val();
+        if (paymentAmount !== '') {
+            $.ajax({
+                url: '../api/donate.php',
+                type: 'POST',
+                data: { amount: paymentAmount },
+                success: function(response) {
+                    console.log(response); // Log the response to the console
+                    alert(response.redirect_url);
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        } else {
+            alert("Please enter a valid amount to donate.");
+        }
+    });
+});
+
+</script>
+
 <script>
   $(document).ready(function() {
     $('.add-ingredient').click(function() {
@@ -386,9 +436,10 @@
 
             if (userEmail !== recipe.recipe_data.posted_by) {
                 recipeHtml += `
-                                    <button type="button" class="btn bg-none">
+                                    <button type="button" class="btn bg-none" data-bs-toggle="modal" data-bs-target="#wallet-modal" data-index="${index}" data-posted="${recipe.recipe_data.posted_by}">
                                         <img src="../assets/img/heart.png" class="img-fluid" title="Donate">
                                     </button>
+
                                     <button type="button" class="btn bg-none bookmark-button" data-index="${index}" data-bookmarked="${recipe.bookmarked}">
                                         <img src="${recipe.bookmarked ? '../assets/img/bookmarked.png' : '../assets/img/bookmark.png'}" class="img-fluid bookmark-icon" width="40px" title="${recipe.bookmarked ? 'Bookmarked' : 'Bookmark'}">
                                     </button>
@@ -400,10 +451,10 @@
                                     <button type="button" class="btn bg-none edit-recipe-btn" data-bs-toggle="modal" data-bs-target="#editRecipeModal">
                                         <img src="../assets/img/pencil.svg" style="width:40px; height: 40px;" class="img-fluid" title="Edit Recipe">
                                     </button>
-                                    <button type="button" class="btn bg-none">
-                                        <img src="../assets/img/delete.png" style="width:40px; height: 40px;"class="img-fluid" title="Delete Recipe">
+                                    <button type="button" class="btn bg-none delete-recipe-btn" data-index="${index}" data-recipe-id="${recipe.recipe_data.recipe_id}">
+                                        <img src="../assets/img/delete.png" style="width:40px; height: 40px;" class="img-fluid" title="Delete Recipe">
                                     </button>
-                                    <input type="hidden" class="recipe-id" value="${recipe.recipe_data.recipe_id}">
+                                    <input type="hidden" class="recipe-id" value="${recipe.recipe_data.recipe_id}"><input type="hidden" class="recipe-id" value="${recipe.recipe_data.recipe_id}">
                                     `;
             }
 
@@ -447,7 +498,7 @@
     $(document).on('click', '.click-button', function() {
         var index = $(this).data('index');
         var ingredientsList = response.recipes[index].formatted_ingredients;
-
+        
         $('#ingredientsTable tbody').empty();
 
         var ingredients = ingredientsList.map(function(ingredientString) {
@@ -472,6 +523,32 @@
 
         $('#ingredientsModal').modal('show');
     });
+
+   $(document).on('click', '.delete-recipe-btn', function() {
+    var recipeId = $(this).closest('.container').find('.recipe-id').val();
+
+    if (confirm("Are you sure you want to delete this recipe?")) {
+        $.ajax({
+            url: '../api/delete_recipe.php',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                recipeId: recipeId
+            },
+            success: function(response) {
+                if (response.status === 'success') {
+                    location.reload();
+                } else {
+                    console.error(response.message);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error("Error deleting recipe:", error);
+            }
+        });
+    }
+});
+
 </script>
 
 <script>

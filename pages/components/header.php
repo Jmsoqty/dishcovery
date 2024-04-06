@@ -11,10 +11,10 @@
     <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
       <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
         <div class="btn-group" style="margin-right: 20px;">
-        <a class="nav-link nav-icon-hover cursor-pointer" title="Notifications" data-bs-toggle="dropdown" aria-expanded="false">
+        <!-- <a class="nav-link nav-icon-hover cursor-pointer" title="Notifications" data-bs-toggle="dropdown" aria-expanded="false">
           <img src="../assets/img/notification.png" alt="Notification" width="25" height="25" class="rounded-circle">
           <span class="badge bg-danger position-absolute top-0 start-100 translate-middle p-1" style="font-size: 0.75rem;">5</span>
-        </a>
+        </a> -->
         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" style="max-height: 400px; width: 400px; overflow-y: auto;">
         <li>
             <div class="dropdown-item">
@@ -99,7 +99,7 @@
             </button>
           </li>
           <li>
-            <button class="d-flex align-items-center gap-2 dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#wallet-modal">
+            <button class="d-flex align-items-center gap-2 dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#ewallet-modal">
               <i class="ti ti-wallet fs-6"></i>
               <p class="mb-0 fs-5" title="E-Wallet">E-Wallet</p>
             </button>
@@ -149,6 +149,33 @@
     </div>
   </div>
 </div>
+
+
+<div class="modal fade" id="ewallet-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="ewallet-modal-label">E-Wallet Balance</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-floating mb-3">
+          <h1 class="text-center" name="balance" id="balance">$100.00</h1>
+          <label for="balance">Current Balance</label>
+        </div>
+        <div class="form-floating mb-3">
+          <input type="number" class="form-control" id="payment" name="payment" step="0.01" min="1" max="100000" placeholder="Insert your desired amount">
+          <label for="payment">Top-up</label>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="ti ti-x fs-3"></i> Close</button>
+        <button type="button" class="btn btn-primary" id="pay-button"><i class="ti ti-edit fs-3"></i> Cash-in</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <script>
 $(document).ready(function() {
