@@ -319,6 +319,86 @@
     </div>
 </div>
 
+<div class="modal fade" id="wallet-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="wallet-modal-label">E-Wallet Balance</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-floating mb-3">
+                    <h1 class="text-center" id="balance">$<?php echo $current_balance; ?></h1>
+                    <label for="balance">Current Balance</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="number" class="form-control" id="donation" step="0.01" min="1" max="100000" placeholder="Insert your desired amount">
+                    <label for="donation">Send Funds</label>
+                </div>
+                <div id="paypal-button-container"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function setPostedBy(button) {
+        var postedBy = button.getAttribute('data-posted');
+        document.getElementById('wallet-modal').setAttribute('data-posted', postedBy);
+    }
+
+    paypal.Buttons({
+        createOrder: function(data, actions) {
+            var amount = document.getElementById('donation').value;
+            var currentBalance = parseFloat(document.getElementById('balance').innerText.replace('$', ''));
+
+            if (currentBalance < amount) {
+                alert('Your current balance is insufficient. Please top up more.');
+                return actions.reject();
+            }
+
+            return actions.order.create({
+                purchase_units: [{
+                    amount: {
+                        value: amount,
+                        currency_code: 'USD'
+                    }
+                }]
+            });
+        },
+        onApprove: function(data, actions) {
+            var postedBy = document.getElementById('wallet-modal').getAttribute('data-posted');
+            var amount = document.getElementById('donation').value;
+            var transactionId = data.orderID;
+            return actions.order.capture().then(function(details) {
+                $.ajax({
+                    type: "POST",
+                    url: "../api/donate.php",
+                    data: {
+                        payment: amount,
+                        posted_by: postedBy,
+                        transaction_id: transactionId
+                    },
+                    success: function(response) {
+                        alert('Donated Successfully, please reload the page.');
+                    },
+                    error: function(xhr, status, error) {
+                        alert('An error occurred, please try again later');
+                        console.error(error);
+                    }
+                });
+            });
+        },
+        onCancel: function(data) {
+            alert('Payment cancelled');
+        },
+        onError: function(err) {
+            alert('Please top up more, try again later');
+            console.error(err);
+        }
+    }).render('#paypal-button-container');
+</script>
+
 <script>
   $(document).ready(function() {
     $('.add-ingredient').click(function() {
@@ -510,8 +590,8 @@
 
             if (userEmail !== recipe.recipe_data.posted_by) {
                 recipeHtml += `
-                                    <button type="button" class="btn bg-none">
-                                        <img src="../assets/img/heart.png" class="img-fluid" title="Donate">
+                                    <button type="button" class="btn bg-none" data-bs-toggle="modal" data-bs-target="#wallet-modal" data-index="${index}" data-posted="${recipe.recipe_data.posted_by}" onclick="setPostedBy(this)">
+                                    <img src="../assets/img/heart.png" class="img-fluid" title="Donate">
                                     </button>
                                     <button type="button" class="btn bg-none bookmark-button" data-index="${index}" data-bookmarked="${recipe.bookmarked}">
                                         <img src="${recipe.bookmarked ? '../assets/img/bookmarked.png' : '../assets/img/bookmark.png'}" class="img-fluid bookmark-icon" width="40px" title="${recipe.bookmarked ? 'Bookmarked' : 'Bookmark'}">

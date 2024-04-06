@@ -1,4 +1,5 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://www.paypal.com/sdk/js?client-id=AdmiBfK5VjxEmoqpDviFGPWMnbRl2EBBvDCCoP0yrn_65PPWDcq8FLWE9AY_1E_3zH-W7nOGJHh0-wt3&currency=USD"></script>
 <header class="app-header">
   <nav class="navbar navbar-expand-lg navbar-light">
     <ul class="navbar-nav">
@@ -151,30 +152,84 @@
 </div>
 
 
+<!-- Modal -->
 <div class="modal fade" id="ewallet-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="ewallet-modal-label">E-Wallet Balance</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div class="form-floating mb-3">
-          <h1 class="text-center" name="balance" id="balance">$100.00</h1>
-          <label for="balance">Current Balance</label>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ewallet-modal-label">E-Wallet Balance</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-floating mb-3">
+                    <h1 class="text-center" name="balance" id="balance">$
+                    <?php 
+                    $current_balance = '0.00';
+
+                    $sql = "SELECT ewallet_value FROM tbl_users WHERE email = '$email'";
+                    $result = $conn->query($sql);
+
+                    if ($result->num_rows > 0) {
+                        $row = $result->fetch_assoc();
+                        echo $current_balance = $row['ewallet_value'];
+                    }
+                    ?></h1>
+                    <label for="balance">Current Balance</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="number" class="form-control" id="payment" name="payment" step="0.01" min="1" max="100000" placeholder="Insert your desired amount">
+                    <label for="payment">Top-up</label>
+                </div>
+                <div id="paypal-button-container-1"></div>
+            </div>
         </div>
-        <div class="form-floating mb-3">
-          <input type="number" class="form-control" id="payment" name="payment" step="0.01" min="1" max="100000" placeholder="Insert your desired amount">
-          <label for="payment">Top-up</label>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="ti ti-x fs-3"></i> Close</button>
-        <button type="button" class="btn btn-primary" id="pay-button"><i class="ti ti-edit fs-3"></i> Cash-in</button>
-      </div>
     </div>
-  </div>
 </div>
+
+<script>
+        paypal.Buttons({
+            createOrder: function(data, actions) {
+                var amount = $('#payment').val();
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: amount,
+                            currency_code: 'USD'
+                        }
+                    }]
+                });
+            },
+            onApprove: function(data, actions) {
+                return actions.order.capture().then(function(details) {
+                    var amount = $('#payment').val();
+                    var transactionId = data.orderID;
+                    $.ajax({
+                        type: "POST",
+                        url: "../api/topup.php",
+                        data: { 
+                            payment: amount,
+                            transaction_id: transactionId
+                        },
+                        success: function(response) {
+                            alert('Top-up successful. Please reload the page.');
+                        },
+                        error: function(xhr, status, error) {
+                            alert('An error occurred, please try again later');
+                            console.error(error);
+                        }
+                    });
+                });
+            },
+            onCancel: function(data) {
+                alert('Payment cancelled');
+            },
+            onError: function(err) {
+                alert('An error occurred, please try again later');
+                console.error(err);
+            }
+        }).render('#paypal-button-container-1');
+    </script>
+
 
 
 <script>
