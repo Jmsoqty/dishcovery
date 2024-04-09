@@ -13,6 +13,18 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 </head>
+<style>
+.green-row {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+
+.red-row {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+</style>
 <body>
 <?php include 'components/navigation.php'; ?>
 
@@ -82,6 +94,14 @@
                                 $('<td class="text-center">').text(row.sent_to),
                                 $('<td class="text-center">').text(row.date_sent)
                             );
+
+                            // Add classes to the row based on amount_php
+                            if (row.amount_php.startsWith('+')) {
+                                tr.addClass('green-row');
+                            } else if (row.amount_php.startsWith('-')) {
+                                tr.addClass('red-row');
+                            }
+
                             historyBody.append(tr);
                         }
                     });
@@ -106,6 +126,8 @@
         });
     });
 </script>
+
+
 
 
 
