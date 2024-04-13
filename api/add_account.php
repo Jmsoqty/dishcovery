@@ -8,21 +8,23 @@ if (!empty($_POST['username']) && !empty($_POST['email'])) {
     $username = trim($_POST['username']);
     $email = trim($_POST['email']);
     
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $response['error'] = "Invalid email format";
-    } else {
-        $sql = "SELECT * FROM tbl_users WHERE email = '$email'";
-        $result = $conn->query($sql);
+    // Check if the user already exists
+    $sql = "SELECT * FROM tbl_users WHERE email = '$email'";
+    $result = $conn->query($sql);
 
-        if ($result && $result->num_rows > 0) {
-            return;
+    if ($result && $result->num_rows > 0) {
+        // User already exists, do nothing or handle accordingly
+        $response['success'] = "User already exists";
+    } else {
+        // Insert the user into the database
+        $insert_sql = "INSERT INTO tbl_users (name, username, email, password) VALUES ('$username', '$username', '$email', '')";
+        if ($conn->query($insert_sql) === TRUE) {
+            // User inserted successfully, log the user in
+            $_SESSION['username'] = $username;
+            $_SESSION['email'] = $email;
+            $response['success'] = "User registered and logged in successfully";
         } else {
-            $insert_sql = "INSERT INTO tbl_users (name, username, email, password) VALUES ('$username', '$username', '$email', '')";
-            if ($conn->query($insert_sql) === TRUE) {
-                $response['success'] = "User registered successfully";
-            } else {
-                $response['error'] = "Error: " . $insert_sql . "<br>" . $conn->error;
-            }
+            $response['error'] = "Error inserting user: " . $conn->error;
         }
     }
 } else {

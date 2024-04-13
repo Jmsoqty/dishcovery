@@ -220,7 +220,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     <div class="row">
                         <div class="col-12 col-lg-4">
                             <div class="d-flex justify-content-around">
-                                <img src="data:image/jpeg;base64,${recipe.image_data || '../assets/img/default.png'}" class="img-fluid w-25">
+                                <img src="data:image/jpeg;base64,${recipe.image_data || '../assets/img/default.png'}" class="img-fluid w-25" style="width: 100px; height: 80px;">
                                 <div class="my-auto">
                                     <label class="fw-semibold" id="posted_by">${recipe.recipe_data.posted_by_name}</label>
                                     <p>${formatDate(recipe.recipe_data.date_updated)}</p>
@@ -539,7 +539,7 @@ function fetchComments(recipeId) {
                             <div class="container">
                                 <div class="d-flex justify-content-around align-items-center">
                                     <div>
-                                        <img src="data:image/jpeg;base64,${comment.prof_pic}" class="img-fluid me-2 rounded-circle" width="50px">
+                                        <img src="data:image/jpeg;base64,${comment.prof_pic}" class="img-fluid me-2 rounded-circle" style="width: 100px; height: 80px;" >
                                     </div>
                                     <div class="w-100 rounded p-2">
                                         <p>${formattedDate}</p>

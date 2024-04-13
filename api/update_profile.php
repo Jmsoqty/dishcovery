@@ -5,54 +5,59 @@ session_start();
 $response = array();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email = $_SESSION['email'];
+    $email = isset($_POST['email']) ? $_POST['email'] : $_SESSION['email'];
     $newUsername = $_POST['username'];
     $newPassword = $_POST['password'];
     $fullname = $_POST['fullname'];
 
-    // Check if profile image is uploaded
-    if (isset($_FILES["profile_image"]) && $_FILES["profile_image"]["error"] === 0) {
-        $imageData = file_get_contents($_FILES["profile_image"]["tmp_name"]);
-    } else {
-        $imageData = null;
+    // Initialize image data to null
+    $imageData = null;
+
+    // Check if a file is uploaded
+    if (isset($_FILES["prof_pic"]) && $_FILES["prof_pic"]["error"] === 0) {
+        // Read the file content as binary data
+        $imageData = file_get_contents($_FILES["prof_pic"]["tmp_name"]);
     }
 
     if (empty($newUsername) && empty($newPassword) && empty($fullname) && empty($imageData)) {
         $response['success'] = false;
         $response['message'] = "No changes to update!";
     } else {
-        $updateSql = "UPDATE tbl_users SET";
+        $updateSql = "UPDATE tbl_users SET ";
         $params = array();
 
+        // Append updates based on non-empty values
         if (!empty($newUsername)) {
-            $updateSql .= " username = ?";
+            $updateSql .= "username = ?, ";
             $params[] = $newUsername;
         }
 
         if (!empty($newPassword)) {
             $hashedPassword = md5($newPassword);
-            $updateSql .= empty($params) ? "" : ",";
-            $updateSql .= " password = ?";
+            $updateSql .= "password = ?, ";
             $params[] = $hashedPassword;
         }
 
         if (!empty($fullname)) {
-            $updateSql .= empty($params) ? "" : ",";
-            $updateSql .= " name = ?";
+            $updateSql .= "name = ?, ";
             $params[] = $fullname;
         }
 
-        if (!empty($imageData)) {
-            $updateSql .= empty($params) ? "" : ",";
-            $updateSql .= " prof_pic = ?";
+        if ($imageData !== null) {
+            $updateSql .= "prof_pic = ?, ";
             $params[] = $imageData;
         }
 
+        // Remove trailing comma and space
+        $updateSql = rtrim($updateSql, ', ');
+
+        // Add WHERE clause
         $updateSql .= " WHERE email = ?";
         $params[] = $email;
 
         $stmt = $conn->prepare($updateSql);
         if ($stmt) {
+            // Determine the parameter types for binding
             $types = str_repeat("s", count($params));
             $stmt->bind_param($types, ...$params);
 

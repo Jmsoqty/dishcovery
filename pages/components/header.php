@@ -125,7 +125,7 @@
         <div class="shadow border border-opacity-50 mt-2" style="width: 200px; height: 200px; margin: 0 auto; text-align: center; display: flex; align-items: center; justify-content: center;">
           <img src="<?php echo $image_source; ?>" style="width: 180px; height: 180px;" class="profile-image-preview">
         </div>
-        <input type="file" name="profile_image" id="profile_image" accept="image/*" class="form-control form-control-sm mt-4 mb-3 profile-image-input">
+        <input type="file" name="prof_pic" id="prof_pic" accept="image/*" class="form-control form-control-sm mt-4 mb-3 profile-image-input">
         <div class="form-floating mb-3">
           <input type="text" class="form-control" name="fullname" id="fullname" value="">
           <label for="fullname">Full Name: <?php echo $fullname; ?></label>
@@ -135,8 +135,8 @@
           <label for="username">Username: <?php echo $username; ?></label>
         </div>
         <div class="form-floating mb-3">
-          <input type="email" class="form-control" id="email" name="email" value="">
-          <label for="email">Email: <?php echo $email; ?></label>
+          <input type="email" class="form-control" id="email" name="email" value="<?php echo $email; ?>" readonly>
+          <label for="email">Email: </label>
         </div>
         <div class="form-floating">
           <input type="password" class="form-control" id="password" name="password" minlength="6">
@@ -250,16 +250,14 @@ $(document).ready(function() {
 
   $('#update-button').on('click', function() {
     const fullname = $('#fullname').val();
-    const profileImage = $('#profile_image').prop('files')[0];
+    const profileImage = $('#prof_pic').prop('files')[0];
     const username = $('#username').val();
-    const email = $('#email').val();
     const password = $('#password').val();
 
     const formData = new FormData();
     formData.append('fullname', fullname);
-    formData.append('profile_image', profileImage);
+    formData.append('prof_pic', profileImage);
     formData.append('username', username);
-    formData.append('email', email);
     formData.append('password', password);
 
     $.ajax({
