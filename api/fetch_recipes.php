@@ -17,10 +17,10 @@ if ($result) {
         while ($row = $result->fetch_assoc()) {
             // Fetch the binary data for the image
             $binaryImageData = $row['posted_by_image'];
-
-            // Remove the binary image data from the row array
-            unset($row['posted_by_image']);
-
+            $base64Image = base64_encode($binaryImageData);
+            
+            // Store the Base64 image data in the row array
+            $row['posted_by_image'] = $base64Image;
             // Fetch ingredients JSON string
             $ingredients = json_decode($row['ingredients'], true);
 
@@ -34,7 +34,7 @@ if ($result) {
             $response['recipes'][] = array(
                 'recipe_data' => $row,
                 'formatted_ingredients' => $formattedIngredients,
-                'image_data' => base64_encode($binaryImageData) // Convert binary data to base64 for JSON
+                'image_data' => $base64Image // Convert binary data to base64 for JSON
             );
         }
         $result->close();
