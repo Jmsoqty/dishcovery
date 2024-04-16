@@ -8,7 +8,8 @@ $response = array();
 $sql = "SELECT tbl_recipes.*, tbl_users.name AS posted_by_name, tbl_users.prof_pic AS posted_by_image
         FROM tbl_recipes
         INNER JOIN tbl_users ON tbl_recipes.posted_by = tbl_users.email
-        WHERE tbl_recipes.isPublic = 1";
+        WHERE tbl_recipes.isPublic = 1
+        ORDER BY tbl_recipes.date_updated DESC";
 
 $result = $conn->query($sql);
 

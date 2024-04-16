@@ -3,7 +3,7 @@ include 'dbconfig.php';
 session_start();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $bookmark_by = $_SESSION['email'];
+    $bookmark_by = $_SESSION['email'] ?? $_POST['email'];
     $recipe_id = $_POST['recipe_id'];
 
     $sql = "DELETE FROM tbl_bookmarks

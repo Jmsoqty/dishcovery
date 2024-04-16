@@ -4,7 +4,7 @@ session_start();
 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $comment_by = $_SESSION['email'];
+    $comment_by = isset($_POST['email']) ? $_POST['email'] : $_SESSION['email'];
     $recipe_id = $_POST['recipe_id'];
     $comment_description = $_POST['comment_description'];
 
