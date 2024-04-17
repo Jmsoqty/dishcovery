@@ -3,7 +3,7 @@ include 'dbconfig.php';
 session_start();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $user_who_joined = $_SESSION['email'];
+    $user_who_joined = $_SESSION['email'] ?? $_POST['email'];
     $group_name = $_POST['group_name'];
 
     $check_sql = "SELECT * FROM tbl_communities WHERE community_name = '$group_name'";

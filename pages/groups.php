@@ -22,8 +22,11 @@
 <!--  Header -->
 <?php include 'components/header.php'; ?>
 <div class="container-fluid">
-        <div class="d-flex justify-content-around">
+        <div class="container border border-1 rounded text-center">
+                <h1 id="title_of_page">Groups Page</h1>
+        </div>
 
+        <div class="d-flex justify-content-around">
             <img src="../assets/img/search.png" class="img-fluid me-2" id ="searchbar_main" width="35px">
             
             <input class="form-control w-100 me-4" type="text" id="search_input" placeholder="Search.." aria-label="default input example">
@@ -32,7 +35,9 @@
             
             <img src="../assets/img/join.png" class="img-fluid me-3" data-bs-toggle="modal" data-bs-target="#join" id ="join_group" width="35px" title="Join Group">
 
-            <img src="../assets/img/dismissal.png" class="img-fluid me-3" data-bs-toggle="modal" data-bs-target="#visit" id ="visit_group" width="35px" title="Visit Group">
+            <img src="../assets/img/person.png" class="img-fluid me-3" data-bs-toggle="modal" data-bs-target="#visit" id ="visit_group" width="35px" title="Visit Group">
+
+            <img src="../assets/img/dismissal.png" class="img-fluid me-3" data-bs-toggle="modal" data-bs-target="#leave" id ="leave_group" width="35px" title="Leave Group">
 
         </div>
         
@@ -199,6 +204,75 @@
     </div>
   </div>
 </div>
+
+<div class="modal fade" id="leave" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-md">
+    <div class="modal-content rounded-5 shadow-lg">
+      <div class="modal-header border-bottom-0">
+        <h3 class="modal-title text-center w-100" id="exampleModalLabel">Leave a Group</h3>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" id="search_leave" placeholder="Search..." aria-label="Search for groups" aria-describedby="searchbar">
+          <span class="input-group-text" id="searchbar"><img src="../assets/img/search.png" alt="Search" width="20"></span>
+        </div>
+        <hr>
+        <h5 class="text-center">Joined Groups</h5>
+        <table class="table" id="group_table_leave">
+          <thead>
+            <tr>
+              <th scope="col">Community Name</th>
+              <th scope="col">Number of Members</th>
+              <th scope="col">Date Created</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php
+            $session_email = $_SESSION['email'];
+            $sql = "SELECT 
+                        community_name,
+                        COUNT(*) AS number_of_members,
+                        MIN(date_created) AS date_created
+                    FROM 
+                        tbl_communities
+                    WHERE 
+                        community_name IN (SELECT community_name FROM tbl_communities WHERE user_who_joined = '$session_email')
+                    GROUP BY 
+                        community_name";
+
+            $result = $conn->query($sql);
+
+            if (!$result) {
+                echo "Error: " . $conn->error;
+            } else {
+                if ($result->num_rows > 0) {
+                    while($row = $result->fetch_assoc()) {
+                        echo "<tr>";
+                        echo "<td class='text-center'>" . $row["community_name"] . "</td>";
+                        echo "<td class='text-center'>" . $row["number_of_members"] . "</td>";
+                        $formatted_date = date("F j, Y", strtotime($row["date_created"]));
+                        echo "<td class='text-center'>" . $formatted_date . "</td>";
+                        echo "</tr>";
+                    }
+                } else {
+                    echo "<tr><td colspan='3' class='text-center'>No communities found</td></tr>";
+                }
+            }
+            ?>
+          </tbody>
+        </table>
+        <div id="no_community_found_leave" class="text-center mt-3" style="display: none;">
+          No Community Found
+        </div>
+        <div class="text-center mt-3">
+          <button type="button" id="leave_group_button" class="btn btn-primary">Leave Group</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 
 
@@ -785,6 +859,61 @@ $(document).ready(function() {
 
 <script>
   $(document).ready(function() {
+    $('#search_leave').on('keyup', function() {
+      var searchText = $(this).val().toLowerCase();
+      var noCommunityFound = true;
+      $('#group_table_leave tbody tr').each(function() {
+        var rowText = $(this).text().toLowerCase();
+        var rowVisible = rowText.indexOf(searchText) > -1;
+        $(this).toggle(rowVisible);
+        if (rowVisible) {
+          noCommunityFound = false;
+        }
+      });
+      $('#no_community_found_leave').toggle(noCommunityFound);
+    });
+
+    $('#leave_group_button').click(function() {
+      var selectedRow = $('#group_table_leave tbody tr.selected');
+      if (selectedRow.length > 0) {
+        var communityName = selectedRow.find('td:eq(0)').text();
+        leaveGroup(communityName);
+      }
+    });
+
+    $('#group_table_leave tbody').on('click', 'tr', function() {
+      $('#group_table_leave tbody tr.selected').removeClass('selected');
+      $(this).addClass('selected');
+    });
+
+    function leaveGroup(communityName) {
+        $.ajax({
+            type: 'POST',
+            url: '../api/leave_group.php',
+            data: {group_name: communityName},
+            success: function(response) {
+                alert(response);
+                var currentUrl = new URL(window.location.href);
+                var currentCommunityParam = currentUrl.searchParams.get('community');
+
+                if (currentCommunityParam && currentCommunityParam === communityName) {
+                    currentUrl.searchParams.delete('community');
+                    window.history.pushState({}, document.title, currentUrl.toString());
+                }
+                location.reload();
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText);
+                alert('Error leaving group. Please try again.'); 
+            }
+        });
+    }
+  });
+</script>
+
+
+<script>
+  $(document).ready(function() {
     function getCommunityFromUrl() {
       var urlParams = new URLSearchParams(window.location.search);
       return urlParams.get('community');
@@ -792,6 +921,9 @@ $(document).ready(function() {
 
     function loadContentFromCommunity(community) {
       if (community) {
+        var titleElement = document.getElementById('title_of_page');
+        titleElement.textContent = community;
+
         var imageSource = "<?php echo $image_source; ?>";
         var fullname = "<?php echo $fullname; ?>";
         var content = `
@@ -861,8 +993,11 @@ $(document).ready(function() {
       var updatedUrl = urlWithoutParams + '?community=' + encodeURIComponent(communityName);
       window.history.pushState({}, document.title, updatedUrl);
       
+
       loadContentFromCommunity(communityName);
       location.reload();
+
+      
     }
   });
 </script>
