@@ -20,8 +20,10 @@ if ($result) {
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
             $binaryImageData = $row['posted_by_image'];
-
-            unset($row['posted_by_image']);
+            $base64Image = base64_encode($binaryImageData);
+            
+            // Store the Base64 image data in the row array
+            $row['posted_by_image'] = $base64Image;
 
             $ingredients = json_decode($row['ingredients'], true);
 
@@ -32,7 +34,7 @@ if ($result) {
             $response['recipes'][] = array(
                 'recipe_data' => $row,
                 'formatted_ingredients' => $formattedIngredients,
-                'image_data' => base64_encode($binaryImageData)
+                'image_data' => $base64Image
             );
         }
         $result->close();

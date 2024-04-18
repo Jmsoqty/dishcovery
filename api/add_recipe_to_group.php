@@ -7,7 +7,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $category = $_POST['category_name'];
     $ingredients = $_POST['ingredients'];
     $instructions = $_POST['instructions'];
-    $posted_by = $_SESSION['email'];
+    $posted_by = $_SESSION['email'] ?? $_POST['email'];
     $posted_in = $_POST['community_name'];
     $isPublic = 0;
     $date_updated = date("Y-m-d H:i:s");
