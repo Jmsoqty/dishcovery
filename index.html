@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@3.0.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+    <link rel="icon" type="image/png" href="assets/img/logo.png">
+    <link rel="stylesheet" href="styles.css" />
+    <title>Dishcovery | Platform</title>
+  </head>
+  <body>
+    <nav>
+      <div class="nav__logo"><a href="#">Dishcovery</a></div>
+      <ul class="nav__links">
+        <li class="link">Login</li>
+      </ul>
+    </nav>
+    <header>
+      <div class="section__container">
+        <div class="header__content">
+          <h1>Dishcovery</h1>
+          <p>
+            This Recipe Sharing Platform is an online community where users can share, discover, and appreciate culinary creations. This platform encourages users to showcase their favorite recipes, engage in discussions about cooking techniques, and contribute to a collaborative environment of food enthusiasts. It has an online funding transaction for optional financial contributions, the platform aims to foster a sense of appreciation and support within the cooking community.
+          </p>
+          <button><a href="dishcovery.apk" style="text-decoration: none;" download>Install the app</a></button> 
+        </div>
+      </div>
+    </header>
+
+    <section class="journey__container">
+      <div class="section__container">
+        <h2 class="section__title">Start Your Cooking Journey</h2>
+        <p class="section__subtitle">The most searched foods in Philippines</p>
+        <div class="journey__grid">
+          <div class="country__card">
+            <img src="images/country-1.jpg" alt="country" />
+            <div class="country__name">
+            </div>
+          </div>
+          <div class="country__card">
+            <img src="images/country-2.jpg" alt="country" />
+            <div class="country__name">
+            </div>
+          </div>
+          <div class="country__card">
+            <img src="images/country-3.jpg" alt="country" />
+            <div class="country__name">
+            </div>
+          </div>
+          <div class="country__card">
+            <img src="images/country-4.jpg" alt="country" />
+            <div class="country__name">
+            </div>
+          </div>
+          <div class="country__card">
+            <img src="images/country-5.jpg" alt="country" />
+            <div class="country__name">
+            </div>
+          </div>
+          <div class="country__card">
+            <img src="images/country-6.jpg" alt="country" />
+            <div class="country__name">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="banner__container">
+      <div class="section__container">
+        <div class="banner__content">
+          <h2>Visit our platform</h2>
+          <p>
+            Indulge your culinary creativity with our dynamic recipe platform! Craft, refine, and curate your culinary masterpieces effortlessly with our user-friendly recipe creation and editing features. Engage with a vibrant community of fellow food enthusiasts, exchanging comments, inquiries, and innovative suggestions. Elevate your culinary journey by supporting talented creators through voluntary monetary contributions, fostering a culture of appreciation and collaboration. Dive into a sea of flavors with our robust recipe discovery and search functionalities, equipped with filters and categories for seamless exploration. Join us in celebrating the art of cooking and sharing, where every dish tells a story and every chef finds their spotlight.
+          </p>
+          <button id="visitButton">Visit here</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="display__container">
+      <div class="section__container">
+        <h2 class="section__title">Why Entertain Us</h2>
+        <p class="section__subtitle">
+          Dishcovery is tailored for home cooks and food enthusiasts, not intended as a substitute for professional culinary platforms.
+        </p>
+        <div class="display__grid">
+          <div class="display__card grid-1">
+            <img src="images/grid-1.jpg" alt="grid" style="height: 100%;"/>
+          </div>
+          <div class="display__card">
+            <i class="ri-earth-line"></i>
+            <h4>International Dishes</h4>
+            <p>Opportunity to discover more!</p>
+          </div>
+          <div class="display__card">
+            <img src="images/grid-2.jpg" alt="grid" />
+          </div>
+          <div class="display__card">
+            <img src="images/grid-3.jpg" alt="grid" />
+          </div>
+          <div class="display__card">
+            <i class="ri-road-map-line"></i>
+            <h4>Crazy Opportunity</h4>
+            <p>Your skills might be your key to become rich!</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="section__container">
+        <h4>Dishcovery</h4>
+        <div class="social__icons">
+          <span><i class="ri-facebook-fill"></i></span>
+          <span><i class="ri-twitter-fill"></i></span>
+          <span><i class="ri-instagram-line"></i></span>
+          <span><i class="ri-linkedin-fill"></i></span>
+        </div>
+        <p>
+          Cooking is not a skill, it is an opportunity.
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+
+      var loginElement = document.querySelector(".link");
+  
+      loginElement.addEventListener("click", function() {
+          window.location.href = "login.php";
+      });
+
+      var visitButton = document.getElementById("visitButton");
+      visitButton.addEventListener("click", function() {
+          window.location.href = "login.php";
+      });
+  });
+  </script>
