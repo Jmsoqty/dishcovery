@@ -805,7 +805,7 @@ $(document).ready(function() {
 </script>
 
 <style>
-  .selected {
+  .selectedThing {
     background-color: #f0f0f0;
   }
 </style>
@@ -827,7 +827,7 @@ $(document).ready(function() {
     });
 
     $('#join_group_button').click(function() {
-      var selectedRow = $('#group_table tbody tr.selected');
+      var selectedRow = $('#group_table tbody tr.selectedThing');
       if (selectedRow.length > 0) {
         var communityName = selectedRow.find('td:eq(0)').text();
         joinGroup(communityName);
@@ -835,8 +835,8 @@ $(document).ready(function() {
     });
 
     $('#group_table tbody').on('click', 'tr', function() {
-      $('#group_table tbody tr.selected').removeClass('selected');
-      $(this).addClass('selected');
+      $('#group_table tbody tr.selectedThing').removeClass('selectedThing');
+      $(this).addClass('selectedThing');
     });
 
     function joinGroup(communityName) {
@@ -874,7 +874,7 @@ $(document).ready(function() {
     });
 
     $('#leave_group_button').click(function() {
-      var selectedRow = $('#group_table_leave tbody tr.selected');
+      var selectedRow = $('#group_table_leave tbody tr.selectedThing');
       if (selectedRow.length > 0) {
         var communityName = selectedRow.find('td:eq(0)').text();
         leaveGroup(communityName);
@@ -882,8 +882,8 @@ $(document).ready(function() {
     });
 
     $('#group_table_leave tbody').on('click', 'tr', function() {
-      $('#group_table_leave tbody tr.selected').removeClass('selected');
-      $(this).addClass('selected');
+      $('#group_table_leave tbody tr.selectedThing').removeClass('selectedThing');
+      $(this).addClass('selectedThing');
     });
 
     function leaveGroup(communityName) {
@@ -957,7 +957,7 @@ $(document).ready(function() {
     });
 
     $('#visit_group_button').click(function() {
-      var selectedRow = $('#group_table_joined tbody tr.selected');
+      var selectedRow = $('#group_table_joined tbody tr.selectedThing');
       if (selectedRow.length > 0) {
         var communityName = selectedRow.find('td:eq(0)').text();
         visitGroup(communityName);
@@ -965,8 +965,8 @@ $(document).ready(function() {
     });
 
     $('#group_table_joined tbody').on('click', 'tr', function() {
-      $('#group_table_joined tbody tr.selected').removeClass('selected');
-      $(this).addClass('selected');
+      $('#group_table_joined tbody tr.selectedThing').removeClass('selectedThing');
+      $(this).addClass('selectedThing');
       
       $('#shared_recipe').empty();
     });
